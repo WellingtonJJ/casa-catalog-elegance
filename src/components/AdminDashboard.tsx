@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
@@ -19,6 +18,7 @@ interface HeroSlide {
 interface Product {
   name: string;
   image: string;
+  description: string;
 }
 
 interface Catalog {
@@ -26,6 +26,9 @@ interface Catalog {
   name: string;
   image: string;
   description: string;
+  fullDescription: string;
+  heroImage: string;
+  heroCtaText: string;
   products: Product[];
 }
 
@@ -61,9 +64,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       name: 'Cozinha Gourmet',
       image: 'https://images.unsplash.com/photo-1556909114-b6a90b49b8ba',
       description: 'Utensílios profissionais para sua cozinha',
+      fullDescription: 'Nossa linha de utensílios para cozinha gourmet oferece produtos de alta qualidade para transformar sua experiência culinária. Desde facas profissionais até panelas de aço inox premium, cada item foi cuidadosamente selecionado para atender às necessidades dos cozinheiros mais exigentes.',
+      heroImage: 'https://images.unsplash.com/photo-1556909114-b6a90b49b8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      heroCtaText: 'Solicitar via WhatsApp',
       products: [
-        { name: 'Conjunto de Facas Premium', image: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65' },
-        { name: 'Panelas de Aço Inox', image: 'https://images.unsplash.com/photo-1584990347449-5d5e8c22ee20' }
+        { name: 'Conjunto de Facas Premium', image: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65', description: 'Facas profissionais de aço carbono alemão' },
+        { name: 'Panelas de Aço Inox', image: 'https://images.unsplash.com/photo-1584990347449-5d5e8c22ee20', description: 'Conjunto completo de panelas premium' }
       ]
     },
     {
@@ -71,9 +77,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       name: 'Mesa & Jantar',
       image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96',
       description: 'Elegância para suas refeições especiais',
+      fullDescription: 'Transforme suas refeições em momentos inesquecíveis com nossa coleção de mesa e jantar. De jogos de pratos finos a taças de cristal, cada detalhe é pensado para criar uma experiência sofisticada e acolhedora.',
+      heroImage: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      heroCtaText: 'Solicitar via WhatsApp',
       products: [
-        { name: 'Jogos de Pratos Finos', image: 'https://images.unsplash.com/photo-1587743065668-ccbc49b75e9b' },
-        { name: 'Taças e Copos Crystal', image: 'https://images.unsplash.com/photo-1586450604702-83b3c11b0d5d' }
+        { name: 'Jogos de Pratos Finos', image: 'https://images.unsplash.com/photo-1587743065668-ccbc49b75e9b', description: 'Pratos de porcelana com design exclusivo' },
+        { name: 'Taças e Copos Crystal', image: 'https://images.unsplash.com/photo-1586450604702-83b3c11b0d5d', description: 'Taças de cristal lapidado à mão' }
       ]
     }
   ]);
@@ -90,6 +99,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     name: '',
     image: '',
     description: '',
+    fullDescription: '',
+    heroImage: '',
+    heroCtaText: '',
     products: []
   });
 
@@ -165,10 +177,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   };
 
   const handleAddCatalog = () => {
-    if (!newCatalog.name || !newCatalog.image) {
+    if (!newCatalog.name || !newCatalog.image || !newCatalog.heroImage) {
       toast({
         title: "Erro",
-        description: "Nome e imagem são obrigatórios.",
+        description: "Nome, imagem e imagem do hero são obrigatórios.",
         variant: "destructive",
       });
       return;
@@ -184,6 +196,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       name: '',
       image: '',
       description: '',
+      fullDescription: '',
+      heroImage: '',
+      heroCtaText: '',
       products: []
     });
     setShowNewCatalogForm(false);
@@ -377,32 +392,67 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
             {/* New Catalog Form */}
             {showNewCatalogForm && (
-              <div className="mb-6 p-4 border rounded-lg bg-gray-50">
+              <div className="mb-6 p-6 border rounded-lg bg-gray-50">
                 <h3 className="text-lg font-semibold mb-4">Novo Catálogo</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Nome do Catálogo"
-                    value={newCatalog.name}
-                    onChange={(e) => setNewCatalog({...newCatalog, name: e.target.value})}
-                    className="px-3 py-2 border rounded-lg"
+                
+                <div className="space-y-4">
+                  {/* Informações Básicas */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Nome do Catálogo"
+                      value={newCatalog.name}
+                      onChange={(e) => setNewCatalog({...newCatalog, name: e.target.value})}
+                      className="px-3 py-2 border rounded-lg"
+                    />
+                    <input
+                      type="url"
+                      placeholder="URL da Imagem Principal"
+                      value={newCatalog.image}
+                      onChange={(e) => setNewCatalog({...newCatalog, image: e.target.value})}
+                      className="px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+
+                  <textarea
+                    placeholder="Descrição Curta"
+                    value={newCatalog.description}
+                    onChange={(e) => setNewCatalog({...newCatalog, description: e.target.value})}
+                    rows={2}
+                    className="w-full px-3 py-2 border rounded-lg"
                   />
-                  <input
-                    type="url"
-                    placeholder="URL da Imagem"
-                    value={newCatalog.image}
-                    onChange={(e) => setNewCatalog({...newCatalog, image: e.target.value})}
-                    className="px-3 py-2 border rounded-lg"
+
+                  <textarea
+                    placeholder="Descrição Completa (Para página do catálogo)"
+                    value={newCatalog.fullDescription}
+                    onChange={(e) => setNewCatalog({...newCatalog, fullDescription: e.target.value})}
+                    rows={3}
+                    className="w-full px-3 py-2 border rounded-lg"
                   />
+
+                  {/* Hero do Catálogo */}
+                  <div className="border-t pt-4">
+                    <h4 className="font-semibold mb-3">Hero da Página do Catálogo</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input
+                        type="url"
+                        placeholder="URL da Imagem de Background do Hero"
+                        value={newCatalog.heroImage}
+                        onChange={(e) => setNewCatalog({...newCatalog, heroImage: e.target.value})}
+                        className="px-3 py-2 border rounded-lg"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Texto do Botão CTA"
+                        value={newCatalog.heroCtaText}
+                        onChange={(e) => setNewCatalog({...newCatalog, heroCtaText: e.target.value})}
+                        className="px-3 py-2 border rounded-lg"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <textarea
-                  placeholder="Descrição"
-                  value={newCatalog.description}
-                  onChange={(e) => setNewCatalog({...newCatalog, description: e.target.value})}
-                  rows={3}
-                  className="w-full mt-4 px-3 py-2 border rounded-lg"
-                />
-                <div className="flex gap-2 mt-4">
+
+                <div className="flex gap-2 mt-6">
                   <button
                     onClick={handleAddCatalog}
                     className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center"
@@ -422,7 +472,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             )}
 
             {/* Catalogs List */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="space-y-6">
               {catalogs.map((catalog) => (
                 <CatalogCard
                   key={catalog.id}
@@ -549,7 +599,7 @@ const HeroSlideCard: React.FC<{
   );
 };
 
-// Catalog Card Component
+// Enhanced Catalog Card Component
 const CatalogCard: React.FC<{
   catalog: Catalog;
   isEditing: boolean;
@@ -564,43 +614,150 @@ const CatalogCard: React.FC<{
     onSave(editData);
   };
 
+  const addProduct = () => {
+    setEditData({
+      ...editData,
+      products: [...editData.products, { name: '', image: '', description: '' }]
+    });
+  };
+
+  const updateProduct = (index: number, field: keyof Product, value: string) => {
+    const updatedProducts = editData.products.map((product, i) => 
+      i === index ? { ...product, [field]: value } : product
+    );
+    setEditData({ ...editData, products: updatedProducts });
+  };
+
+  const removeProduct = (index: number) => {
+    setEditData({
+      ...editData,
+      products: editData.products.filter((_, i) => i !== index)
+    });
+  };
+
   if (isEditing) {
     return (
-      <div className="border rounded-lg p-4 bg-gray-50">
-        <input
-          type="text"
-          value={editData.name}
-          onChange={(e) => setEditData({...editData, name: e.target.value})}
-          className="w-full mb-3 px-3 py-2 border rounded-lg"
-          placeholder="Nome do Catálogo"
-        />
-        <input
-          type="url"
-          value={editData.image}
-          onChange={(e) => setEditData({...editData, image: e.target.value})}
-          className="w-full mb-3 px-3 py-2 border rounded-lg"
-          placeholder="URL da Imagem"
-        />
-        <textarea
-          value={editData.description}
-          onChange={(e) => setEditData({...editData, description: e.target.value})}
-          rows={3}
-          className="w-full mb-3 px-3 py-2 border rounded-lg"
-          placeholder="Descrição"
-        />
-        <div className="flex gap-2">
+      <div className="border rounded-lg p-6 bg-gray-50">
+        <h3 className="text-lg font-semibold mb-4">Editando: {catalog.name}</h3>
+        
+        <div className="space-y-4">
+          {/* Informações Básicas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              placeholder="Nome do Catálogo"
+              value={editData.name}
+              onChange={(e) => setEditData({...editData, name: e.target.value})}
+              className="px-3 py-2 border rounded-lg"
+            />
+            <input
+              type="url"
+              placeholder="URL da Imagem Principal"
+              value={editData.image}
+              onChange={(e) => setEditData({...editData, image: e.target.value})}
+              className="px-3 py-2 border rounded-lg"
+            />
+          </div>
+
+          <textarea
+            placeholder="Descrição Curta"
+            value={editData.description}
+            onChange={(e) => setEditData({...editData, description: e.target.value})}
+            rows={2}
+            className="w-full px-3 py-2 border rounded-lg"
+          />
+
+          <textarea
+            placeholder="Descrição Completa"
+            value={editData.fullDescription}
+            onChange={(e) => setEditData({...editData, fullDescription: e.target.value})}
+            rows={3}
+            className="w-full px-3 py-2 border rounded-lg"
+          />
+
+          {/* Hero do Catálogo */}
+          <div className="border-t pt-4">
+            <h4 className="font-semibold mb-3">Hero da Página</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="url"
+                placeholder="URL da Imagem de Background do Hero"
+                value={editData.heroImage}
+                onChange={(e) => setEditData({...editData, heroImage: e.target.value})}
+                className="px-3 py-2 border rounded-lg"
+              />
+              <input
+                type="text"
+                placeholder="Texto do Botão CTA"
+                value={editData.heroCtaText}
+                onChange={(e) => setEditData({...editData, heroCtaText: e.target.value})}
+                className="px-3 py-2 border rounded-lg"
+              />
+            </div>
+          </div>
+
+          {/* Produtos */}
+          <div className="border-t pt-4">
+            <div className="flex justify-between items-center mb-3">
+              <h4 className="font-semibold">Produtos do Catálogo</h4>
+              <button
+                onClick={addProduct}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center"
+              >
+                <Plus className="w-3 h-3 mr-1" />
+                Adicionar Produto
+              </button>
+            </div>
+            
+            <div className="space-y-3">
+              {editData.products.map((product, index) => (
+                <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-2 p-3 border rounded bg-white">
+                  <input
+                    type="text"
+                    placeholder="Nome do Produto"
+                    value={product.name}
+                    onChange={(e) => updateProduct(index, 'name', e.target.value)}
+                    className="px-2 py-1 border rounded text-sm"
+                  />
+                  <input
+                    type="url"
+                    placeholder="URL da Imagem"
+                    value={product.image}
+                    onChange={(e) => updateProduct(index, 'image', e.target.value)}
+                    className="px-2 py-1 border rounded text-sm"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Descrição"
+                    value={product.description}
+                    onChange={(e) => updateProduct(index, 'description', e.target.value)}
+                    className="px-2 py-1 border rounded text-sm"
+                  />
+                  <button
+                    onClick={() => removeProduct(index)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-2 mt-6">
           <button
             onClick={handleSave}
-            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm flex items-center"
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center"
           >
-            <Save className="w-3 h-3 mr-1" />
+            <Save className="w-4 h-4 mr-2" />
             Salvar
           </button>
           <button
             onClick={onCancel}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm flex items-center"
+            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
           >
-            <X className="w-3 h-3 mr-1" />
+            <X className="w-4 h-4 mr-2" />
             Cancelar
           </button>
         </div>
@@ -609,30 +766,61 @@ const CatalogCard: React.FC<{
   }
 
   return (
-    <div className="border rounded-lg overflow-hidden">
-      <img
-        src={catalog.image}
-        alt={catalog.name}
-        className="w-full h-48 object-cover"
-      />
-      <div className="p-4">
-        <h3 className="font-semibold mb-2">{catalog.name}</h3>
-        <p className="text-sm text-gray-600 mb-3">{catalog.description}</p>
-        <p className="text-xs text-gray-500 mb-3">{catalog.products.length} produtos</p>
-        <div className="flex gap-2">
-          <button
-            onClick={onEdit}
-            className="text-blue-600 hover:text-blue-800 p-1"
-          >
-            <Edit className="w-4 h-4" />
-          </button>
-          <button
-            onClick={onDelete}
-            className="text-red-600 hover:text-red-800 p-1"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+    <div className="border rounded-lg overflow-hidden bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+        <div>
+          <img
+            src={catalog.image}
+            alt={catalog.name}
+            className="w-full h-32 object-cover rounded"
+          />
+          <h3 className="font-semibold mt-2">{catalog.name}</h3>
+          <p className="text-sm text-gray-600">{catalog.description}</p>
         </div>
+        
+        <div>
+          <h4 className="font-medium mb-2">Hero da Página</h4>
+          <img
+            src={catalog.heroImage}
+            alt="Hero"
+            className="w-full h-20 object-cover rounded mb-2"
+          />
+          <p className="text-xs text-gray-600">CTA: {catalog.heroCtaText}</p>
+        </div>
+        
+        <div>
+          <h4 className="font-medium mb-2">Produtos ({catalog.products.length})</h4>
+          <div className="grid grid-cols-3 gap-1">
+            {catalog.products.slice(0, 3).map((product, index) => (
+              <div key={index} className="text-center">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-12 object-cover rounded"
+                />
+                <p className="text-xs text-gray-600 mt-1 truncate">{product.name}</p>
+              </div>
+            ))}
+          </div>
+          {catalog.products.length > 3 && (
+            <p className="text-xs text-gray-500 mt-1">+{catalog.products.length - 3} mais</p>
+          )}
+        </div>
+      </div>
+      
+      <div className="flex justify-end gap-2 p-4 bg-gray-50">
+        <button
+          onClick={onEdit}
+          className="text-blue-600 hover:text-blue-800 p-2"
+        >
+          <Edit className="w-4 h-4" />
+        </button>
+        <button
+          onClick={onDelete}
+          className="text-red-600 hover:text-red-800 p-2"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );
