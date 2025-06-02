@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'playfair': ['Playfair Display', 'serif'],
+				'inter': ['Inter', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,6 +66,31 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Cores personalizadas para o tema premium
+				cream: {
+					50: '#fefdfb',
+					100: '#fdf9f3',
+					200: '#faf3e7',
+					300: '#f6ebd5',
+					400: '#f0dcc0',
+					500: '#e8caa4',
+					600: '#deb887',
+					700: '#d1a26b',
+					800: '#c4925e',
+					900: '#b8834f'
+				},
+				gold: {
+					50: '#fffef7',
+					100: '#fffce8',
+					200: '#fff9c5',
+					300: '#fff497',
+					400: '#ffe957',
+					500: '#ffd700',
+					600: '#e6c200',
+					700: '#cc9900',
+					800: '#a67c00',
+					900: '#8a6600'
 				}
 			},
 			borderRadius: {
@@ -84,11 +114,33 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'slide-up': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(20px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.6s ease-out',
+				'slide-up': 'slide-up 0.8s ease-out'
 			}
 		}
 	},
