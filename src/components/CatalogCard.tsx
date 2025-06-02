@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface Product {
   name: string;
@@ -19,14 +20,19 @@ interface CatalogCardProps {
 }
 
 const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
-  const handleWhatsAppClick = () => {
+  const handleWhatsAppClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const phone = "5511999999999";
     const message = encodeURIComponent(`Olá! Gostaria de solicitar o catálogo "${catalog.name}".`);
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+    <Link 
+      to={`/catalog/${catalog.id}`}
+      className="block bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group cursor-pointer"
+    >
       {/* Imagem Principal */}
       <div className="relative h-64 overflow-hidden">
         <img
@@ -39,7 +45,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
           <h3 className="font-playfair text-2xl font-bold text-white mb-1">
             {catalog.name}
           </h3>
-          <p className="text-cream-200 font-inter">
+          <p className="text-cream-200 font-poppins">
             {catalog.description}
           </p>
         </div>
@@ -47,7 +53,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
 
       {/* Produtos em Destaque */}
       <div className="p-6">
-        <h4 className="font-inter text-lg font-semibold text-gray-800 mb-4">
+        <h4 className="font-poppins text-lg font-semibold text-gray-800 mb-4">
           Produtos em Destaque:
         </h4>
         
@@ -61,23 +67,30 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
                   className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                 />
               </div>
-              <p className="text-xs text-gray-600 font-inter leading-tight">
+              <p className="text-xs text-gray-600 font-poppins leading-tight">
                 {product.name}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Botão WhatsApp */}
-        <button
-          onClick={handleWhatsAppClick}
-          className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 font-inter"
-        >
-          <i className="fab fa-whatsapp mr-2 text-lg"></i>
-          Solicitar via WhatsApp
-        </button>
+        {/* Botões */}
+        <div className="space-y-3">
+          <div className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl font-poppins">
+            <i className="fas fa-eye mr-2"></i>
+            Ver Catálogo Completo
+          </div>
+          
+          <button
+            onClick={handleWhatsAppClick}
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 font-poppins"
+          >
+            <i className="fab fa-whatsapp mr-2 text-lg"></i>
+            Solicitar via WhatsApp
+          </button>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

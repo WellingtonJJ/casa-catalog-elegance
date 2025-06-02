@@ -1,4 +1,3 @@
-
 import React from 'react';
 import CatalogCard from './CatalogCard';
 
@@ -57,7 +56,7 @@ const CatalogSection = () => {
           <h2 className="font-playfair text-4xl md:text-5xl font-bold text-gray-800 mb-6">
             Nossos <span className="text-gold-600">Catálogos</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-inter">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-poppins">
             Cada catálogo foi cuidadosamente curado para oferecer produtos excepcionais que elevam o padrão da sua casa
           </p>
         </div>
@@ -75,7 +74,7 @@ const CatalogSection = () => {
         </div>
 
         <div className="text-center mt-16">
-          <p className="text-lg text-gray-600 mb-6 font-inter">
+          <p className="text-lg text-gray-600 mb-6 font-poppins">
             Interessado em algum catálogo específico?
           </p>
           <button
@@ -84,7 +83,7 @@ const CatalogSection = () => {
               const message = encodeURIComponent("Olá! Gostaria de mais informações sobre os catálogos.");
               window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
             }}
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center mx-auto shadow-lg font-inter"
+            className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center mx-auto shadow-lg font-poppins"
           >
             <i className="fab fa-whatsapp mr-3"></i>
             Conversar no WhatsApp
