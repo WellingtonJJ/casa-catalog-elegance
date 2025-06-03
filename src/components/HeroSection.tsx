@@ -14,7 +14,7 @@ const HeroSection = () => {
   const { slides, loading } = useHeroSlides();
 
   const handleWhatsAppClick = () => {
-    const phone = "5511999999999";
+    const phone = "5521964603524";
     const message = encodeURIComponent("Olá! Gostaria de conhecer seus catálogos de utensílios para casa.");
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };

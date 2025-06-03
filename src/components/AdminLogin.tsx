@@ -30,7 +30,7 @@ const AdminLogin: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center mb-8">
             <h2 className="font-playfair text-3xl font-bold text-gray-800">
-              Casa <span className="text-gold-600">Premium</span>
+              Empo<span className="text-gold-600">Rio</span>
             </h2>
             <p className="mt-2 text-gray-600 font-inter">
               {isSignUp ? 'Criar Conta Admin' : 'Painel Administrativo'}
@@ -53,7 +53,7 @@ const AdminLogin: React.FC = () => {
                   value={credentials.email}
                   onChange={(e) => setCredentials({...credentials, email: e.target.value})}
                   className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent font-inter"
-                  placeholder="admin@casapremium.com"
+                  placeholder="admin@emporio.com"
                   required
                 />
               </div>

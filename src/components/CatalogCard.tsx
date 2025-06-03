@@ -13,7 +13,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const phone = "5511999999999";
+    const phone = "5521964603524";
     const message = encodeURIComponent(`Olá! Gostaria de solicitar o catálogo "${catalog.name}".`);
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
@@ -99,28 +99,49 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
 
           {/* Botões lado a lado com design premium */}
           <div className="flex gap-3">
-            {/* Botão Ver Catálogo */}
-            <div className="flex-1 relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 p-[1px] group/btn">
-              <div className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white py-3 px-4 rounded-xl font-semibold transition-all duration-500 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-[1.02] font-poppins text-sm">
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
-                <Eye className="w-4 h-4 mr-2" />
-                <span className="relative z-10">Ver Catálogo</span>
-              </div>
-            </div>
-            
-            {/* Botão WhatsApp */}
-            <button
-              onClick={handleWhatsAppClick}
-              className="flex-1 relative overflow-hidden rounded-xl bg-gradient-to-r from-green-500 via-green-600 to-emerald-600 hover:from-green-600 hover:via-green-700 hover:to-emerald-700 text-white py-3 px-4 font-semibold transition-all duration-500 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-[1.02] font-poppins text-sm group/whatsapp"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/whatsapp:translate-x-[100%] transition-transform duration-1000"></div>
-              <FontAwesomeIcon 
-                icon={faWhatsapp} 
-                className="w-4 h-4 mr-2 group-hover/whatsapp:rotate-12 transition-transform duration-300" 
-              />
-              <span className="relative z-10">WhatsApp</span>
-            </button>
-          </div>
+  {/* Botão Ver Catálogo */}
+  <Link
+    to={`/catalog/${catalog.id}`}
+    className="
+      flex-1 flex items-center justify-center gap-2
+      bg-white border border-gray-200 rounded-xl
+      text-gray-900 font-semibold font-poppins text-base
+      py-3 px-4 shadow-sm
+      transition-all duration-200
+      hover:bg-gray-50 hover:shadow-md
+      active:bg-gray-100 active:shadow-sm
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
+      group
+    "
+    tabIndex={0}
+  >
+    <Eye className="w-4 h-4 text-blue-600" />
+    <span>Ver Catálogo</span>
+  </Link>
+
+  {/* Botão WhatsApp */}
+  <button
+    type="button"
+    onClick={handleWhatsAppClick}
+    className="
+      flex-1 flex items-center justify-center gap-2
+      bg-green-600 border border-green-600 rounded-xl
+      text-white font-semibold font-poppins text-base
+      py-3 px-4 shadow-sm
+      transition-all duration-200
+      hover:bg-green-700 hover:shadow-md
+      active:bg-green-800 active:shadow-sm
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400
+      group
+    "
+    tabIndex={0}
+    aria-label={`Solicitar catálogo de ${catalog.name} no WhatsApp`}
+  >
+    <FontAwesomeIcon icon={faWhatsapp} className="w-4 h-4 text-white" />
+    <span>Solicite por WhatsApp</span>
+  </button>
+</div>
+
         </div>
 
         {/* Efeito de brilho no hover */}
