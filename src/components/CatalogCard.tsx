@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, MessageCircle, Star, ArrowRight } from 'lucide-react';
+import { Eye, Star, ArrowRight } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { Catalog } from '@/hooks/useCatalogs';
 
 interface CatalogCardProps {
@@ -112,7 +114,10 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
               className="flex-1 relative overflow-hidden rounded-xl bg-gradient-to-r from-green-500 via-green-600 to-emerald-600 hover:from-green-600 hover:via-green-700 hover:to-emerald-700 text-white py-3 px-4 font-semibold transition-all duration-500 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-[1.02] font-poppins text-sm group/whatsapp"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/whatsapp:translate-x-[100%] transition-transform duration-1000"></div>
-              <MessageCircle className="w-4 h-4 mr-2 group-hover/whatsapp:rotate-12 transition-transform duration-300" />
+              <FontAwesomeIcon 
+                icon={faWhatsapp} 
+                className="w-4 h-4 mr-2 group-hover/whatsapp:rotate-12 transition-transform duration-300" 
+              />
               <span className="relative z-10">WhatsApp</span>
             </button>
           </div>
