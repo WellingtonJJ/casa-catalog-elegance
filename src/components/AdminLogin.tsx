@@ -117,8 +117,8 @@ const AdminLogin: React.FC = () => {
                 Para criar uma conta de administrador, clique em "Cadastre-se" acima.
               </p>
             </div>
-          )}
-        </div> */}
+          )} */}
+        </div>
       </div>
     </div>
   );
