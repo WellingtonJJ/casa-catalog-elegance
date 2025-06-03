@@ -80,13 +80,7 @@ const HeroSection = () => {
                 )}
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
-                  <button
-                    onClick={handleWhatsAppClick}
-                    className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center shadow-xl font-poppins"
-                  >
-                    <i className="fab fa-whatsapp mr-3 text-xl"></i>
-                    {slide.cta_text || 'Solicitar Orçamento'}
-                  </button>
+
                   
                   <button
                     onClick={() => document.getElementById('catalogs')?.scrollIntoView({ behavior: 'smooth' })}
