@@ -10,7 +10,7 @@ const Footer = () => {
           {/* Logo e Descrição */}
           <div className="col-span-1 md:col-span-2">
             <h3 className="font-playfair text-3xl font-bold mb-4">
-              Casa <span className="text-gold-400">Premium</span>
+              Empo<span className="text-gold-400">Rio</span>
             </h3>
             <p className="text-gray-300 mb-6 font-poppins leading-relaxed">
               Transformamos casas em lares especiais através de utensílios cuidadosamente selecionados. 
