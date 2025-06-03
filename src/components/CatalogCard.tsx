@@ -120,7 +120,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
   </Link>
 
   {/* Botão WhatsApp */}
-  <button
+{/*   <button
     type="button"
     onClick={handleWhatsAppClick}
     className="
@@ -139,7 +139,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
   >
     <FontAwesomeIcon icon={faWhatsapp} className="w-4 h-4 text-white" />
     <span>Solicite por WhatsApp</span>
-  </button>
+  </button> */}
 </div>
 
         </div>
