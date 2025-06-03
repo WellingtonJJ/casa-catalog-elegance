@@ -12,7 +12,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="font-playfair text-2xl font-bold text-gray-800 hover:text-gold-600 transition-colors">
-              Empo<span className="text-gold-600">Rio</span>
+              Impo<span className="text-gold-600">Rio</span>
             </Link>
           </div>
 
