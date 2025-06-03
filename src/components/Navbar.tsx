@@ -12,7 +12,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="font-playfair text-2xl font-bold text-gray-800 hover:text-gold-600 transition-colors">
-              Casa <span className="text-gold-600">Premium</span>
+              Casa <span className="text-gold-600">Utensílios</span>
             </Link>
           </div>
 
