@@ -109,7 +109,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
             </div>
             
             {/* Botão WhatsApp */}
-            <button
+{/*             <button
               onClick={handleWhatsAppClick}
               className="flex-1 relative overflow-hidden rounded-xl bg-gradient-to-r from-green-500 via-green-600 to-emerald-600 hover:from-green-600 hover:via-green-700 hover:to-emerald-700 text-white py-3 px-4 font-semibold transition-all duration-500 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-[1.02] font-poppins text-sm group/whatsapp"
             >
@@ -119,7 +119,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
                 className="w-4 h-4 mr-2 group-hover/whatsapp:rotate-12 transition-transform duration-300" 
               />
               <span className="relative z-10">WhatsAppp</span>
-            </button>
+            </button> */}
           </div>
         </div>
 
