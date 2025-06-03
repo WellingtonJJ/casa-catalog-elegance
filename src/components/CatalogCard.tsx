@@ -29,7 +29,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
         </div>
 
         {/* Imagem Principal com overlay gradiente mais suave */}
-        <div className="relative h-72 overflow-hidden">
+        <div className="relative h-56 overflow-hidden">
           <img
             src={catalog.image}
             alt={catalog.name}
@@ -49,26 +49,26 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
         </div>
 
         {/* Container de conteúdo com glassmorphism sutil */}
-        <div className="p-8 bg-gradient-to-br from-gray-50 to-white relative">
+        <div className="p-6 bg-gradient-to-br from-gray-50 to-white relative">
           {/* Produtos em Destaque */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-5">
-              <h4 className="font-poppins text-xl font-bold text-gray-800 flex items-center gap-2">
-                <div className="w-1 h-6 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="font-poppins text-lg font-bold text-gray-800 flex items-center gap-2">
+                <div className="w-1 h-5 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
                 Produtos em Destaque
               </h4>
-              <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+              <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
             </div>
             
             {catalog.products && catalog.products.length > 0 ? (
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-3">
                 {catalog.products.slice(0, 3).map((product, index) => (
                   <div 
                     key={product.id} 
                     className="text-center group/product"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <div className="relative h-24 w-full mb-3 rounded-2xl overflow-hidden shadow-md group-hover/product:shadow-lg transition-all duration-300">
+                    <div className="relative h-20 w-full mb-2 rounded-xl overflow-hidden shadow-md group-hover/product:shadow-lg transition-all duration-300">
                       <img
                         src={product.image}
                         alt={product.name}
@@ -76,45 +76,44 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover/product:bg-black/10 transition-colors duration-300"></div>
                     </div>
-                    <p className="text-sm text-gray-700 font-poppins font-medium leading-tight group-hover/product:text-gray-900 transition-colors duration-300">
+                    <p className="text-xs text-gray-700 font-poppins font-medium leading-tight group-hover/product:text-gray-900 transition-colors duration-300">
                       {product.name}
                     </p>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Star className="w-8 h-8 text-gray-400" />
+              <div className="text-center py-8">
+                <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full mx-auto mb-3 flex items-center justify-center">
+                  <Star className="w-6 h-6 text-gray-400" />
                 </div>
-                <p className="font-poppins text-gray-500 font-medium">Produtos em breve...</p>
-                <p className="font-poppins text-gray-400 text-sm mt-1">Novidades chegando em breve!</p>
+                <p className="font-poppins text-gray-500 font-medium text-sm">Produtos em breve...</p>
               </div>
             )}
           </div>
 
           {/* Divisor sutil */}
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-8"></div>
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-5"></div>
 
-          {/* Botões com design premium */}
-          <div className="space-y-4">
+          {/* Botões lado a lado com design premium */}
+          <div className="flex gap-3">
             {/* Botão Ver Catálogo */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 p-[1px] group/btn">
-              <div className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-500 flex items-center justify-center shadow-xl hover:shadow-2xl transform hover:scale-[1.02] font-poppins">
+            <div className="flex-1 relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 p-[1px] group/btn">
+              <div className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white py-3 px-4 rounded-xl font-semibold transition-all duration-500 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-[1.02] font-poppins text-sm">
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
-                <Eye className="w-5 h-5 mr-3" />
-                <span className="relative z-10">Ver Catálogo Completo</span>
+                <Eye className="w-4 h-4 mr-2" />
+                <span className="relative z-10">Ver Catálogo</span>
               </div>
             </div>
             
             {/* Botão WhatsApp */}
             <button
               onClick={handleWhatsAppClick}
-              className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-green-500 via-green-600 to-emerald-600 hover:from-green-600 hover:via-green-700 hover:to-emerald-700 text-white py-4 px-6 font-semibold transition-all duration-500 flex items-center justify-center shadow-xl hover:shadow-2xl transform hover:scale-[1.02] font-poppins group/whatsapp"
+              className="flex-1 relative overflow-hidden rounded-xl bg-gradient-to-r from-green-500 via-green-600 to-emerald-600 hover:from-green-600 hover:via-green-700 hover:to-emerald-700 text-white py-3 px-4 font-semibold transition-all duration-500 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-[1.02] font-poppins text-sm group/whatsapp"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/whatsapp:translate-x-[100%] transition-transform duration-1000"></div>
-              <MessageCircle className="w-5 h-5 mr-3 group-hover/whatsapp:rotate-12 transition-transform duration-300" />
-              <span className="relative z-10">Solicitar via WhatsApp</span>
+              <MessageCircle className="w-4 h-4 mr-2 group-hover/whatsapp:rotate-12 transition-transform duration-300" />
+              <span className="relative z-10">WhatsApp</span>
             </button>
           </div>
         </div>
