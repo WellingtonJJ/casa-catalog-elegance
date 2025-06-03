@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CatalogCard from '../components/CatalogCard';
@@ -6,9 +6,9 @@ import { useCatalogs } from '@/hooks/useCatalogs';
 
 const Catalogs = () => {
   // Faz o scroll para o topo assim que o componente monta
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
 
   if (loading) {
     return (
