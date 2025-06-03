@@ -118,7 +118,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
                 icon={faWhatsapp} 
                 className="w-4 h-4 mr-2 group-hover/whatsapp:rotate-12 transition-transform duration-300" 
               />
-              <span className="relative z-10">WhatsAppp</span>
+              <span className="relative z-10">WhatsApp</span>
             </button>
           </div>
         </div>
