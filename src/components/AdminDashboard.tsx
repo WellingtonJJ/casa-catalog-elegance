@@ -1,107 +1,39 @@
 import React, { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, Loader2 } from 'lucide-react';
+import { useHeroSlides, HeroSlide } from '@/hooks/useHeroSlides';
+import { useCatalogs, Catalog, CatalogProduct } from '@/hooks/useCatalogs';
 
 interface AdminDashboardProps {
   onLogout: () => void;
 }
 
-interface HeroSlide {
-  id: number;
-  title: string;
-  subtitle: string;
-  description: string;
-  backgroundImage: string;
-  ctaText: string;
-}
-
-interface Product {
-  name: string;
-  image: string;
-  description: string;
-}
-
-interface Catalog {
-  id: number;
-  name: string;
-  image: string;
-  description: string;
-  fullDescription: string;
-  heroImage: string;
-  heroCtaText: string;
-  products: Product[];
-}
-
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('hero');
-  const [editingSlide, setEditingSlide] = useState<number | null>(null);
-  const [editingCatalog, setEditingCatalog] = useState<number | null>(null);
+  const [editingSlide, setEditingSlide] = useState<string | null>(null);
+  const [editingCatalog, setEditingCatalog] = useState<string | null>(null);
   const [showNewSlideForm, setShowNewSlideForm] = useState(false);
   const [showNewCatalogForm, setShowNewCatalogForm] = useState(false);
   
-  const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([
-    {
-      id: 1,
-      title: "Descubra nossos",
-      subtitle: "catálogos premium",
-      description: "Utensílios elegantes e funcionais para transformar sua casa em um lar ainda mais especial",
-      backgroundImage: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
-      ctaText: "Solicitar Orçamento"
-    },
-    {
-      id: 2,
-      title: "Qualidade",
-      subtitle: "Premium",
-      description: "Produtos cuidadosamente selecionados para atender aos padrões mais exigentes de qualidade",
-      backgroundImage: "https://images.unsplash.com/photo-1556909114-b6a90b49b8ba",
-      ctaText: "Ver Catálogos"
-    }
-  ]);
-
-  const [catalogs, setCatalogs] = useState<Catalog[]>([
-    {
-      id: 1,
-      name: 'Cozinha Gourmet',
-      image: 'https://images.unsplash.com/photo-1556909114-b6a90b49b8ba',
-      description: 'Utensílios profissionais para sua cozinha',
-      fullDescription: 'Nossa linha de utensílios para cozinha gourmet oferece produtos de alta qualidade para transformar sua experiência culinária. Desde facas profissionais até panelas de aço inox premium, cada item foi cuidadosamente selecionado para atender às necessidades dos cozinheiros mais exigentes.',
-      heroImage: 'https://images.unsplash.com/photo-1556909114-b6a90b49b8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      heroCtaText: 'Solicitar via WhatsApp',
-      products: [
-        { name: 'Conjunto de Facas Premium', image: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65', description: 'Facas profissionais de aço carbono alemão' },
-        { name: 'Panelas de Aço Inox', image: 'https://images.unsplash.com/photo-1584990347449-5d5e8c22ee20', description: 'Conjunto completo de panelas premium' }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Mesa & Jantar',
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96',
-      description: 'Elegância para suas refeições especiais',
-      fullDescription: 'Transforme suas refeições em momentos inesquecíveis com nossa coleção de mesa e jantar. De jogos de pratos finos a taças de cristal, cada detalhe é pensado para criar uma experiência sofisticada e acolhedora.',
-      heroImage: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      heroCtaText: 'Solicitar via WhatsApp',
-      products: [
-        { name: 'Jogos de Pratos Finos', image: 'https://images.unsplash.com/photo-1587743065668-ccbc49b75e9b', description: 'Pratos de porcelana com design exclusivo' },
-        { name: 'Taças e Copos Crystal', image: 'https://images.unsplash.com/photo-1586450604702-83b3c11b0d5d', description: 'Taças de cristal lapidado à mão' }
-      ]
-    }
-  ]);
+  const { slides, loading: slidesLoading, addSlide, updateSlide, deleteSlide } = useHeroSlides();
+  const { catalogs, loading: catalogsLoading, addCatalog, updateCatalog, deleteCatalog } = useCatalogs();
 
   const [newSlide, setNewSlide] = useState<Omit<HeroSlide, 'id'>>({
     title: '',
     subtitle: '',
     description: '',
-    backgroundImage: '',
-    ctaText: ''
+    background_image: '',
+    cta_text: '',
+    display_order: 0
   });
 
-  const [newCatalog, setNewCatalog] = useState<Omit<Catalog, 'id'>>({
+  const [newCatalog, setNewCatalog] = useState<Omit<Catalog, 'id' | 'products'> & { products: Omit<CatalogProduct, 'id' | 'catalog_id'>[] }>({
     name: '',
     image: '',
     description: '',
-    fullDescription: '',
-    heroImage: '',
-    heroCtaText: '',
+    full_description: '',
+    hero_image: '',
+    hero_cta_text: '',
     products: []
   });
 
@@ -114,19 +46,17 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   };
 
   // Hero Slides Management
-  const handleSaveSlide = (slideData: HeroSlide) => {
-    setHeroSlides(slides => slides.map(slide => 
-      slide.id === slideData.id ? slideData : slide
-    ));
-    setEditingSlide(null);
-    toast({
-      title: "Slide atualizado!",
-      description: "As alterações foram salvas com sucesso.",
-    });
+  const handleSaveSlide = async (slideData: HeroSlide) => {
+    try {
+      await updateSlide(slideData.id, slideData);
+      setEditingSlide(null);
+    } catch (error) {
+      // Error already handled in hook
+    }
   };
 
-  const handleAddSlide = () => {
-    if (!newSlide.title || !newSlide.backgroundImage) {
+  const handleAddSlide = async () => {
+    if (!newSlide.title || !newSlide.background_image) {
       toast({
         title: "Erro",
         description: "Título e imagem são obrigatórios.",
@@ -135,49 +65,47 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       return;
     }
 
-    const slide: HeroSlide = {
-      ...newSlide,
-      id: Math.max(...heroSlides.map(s => s.id)) + 1
-    };
-    
-    setHeroSlides(slides => [...slides, slide]);
-    setNewSlide({
-      title: '',
-      subtitle: '',
-      description: '',
-      backgroundImage: '',
-      ctaText: ''
-    });
-    setShowNewSlideForm(false);
-    
-    toast({
-      title: "Slide adicionado!",
-      description: "Novo slide criado com sucesso.",
-    });
+    try {
+      const maxOrder = Math.max(...slides.map(s => s.display_order), 0);
+      await addSlide({
+        ...newSlide,
+        display_order: maxOrder + 1
+      });
+      
+      setNewSlide({
+        title: '',
+        subtitle: '',
+        description: '',
+        background_image: '',
+        cta_text: '',
+        display_order: 0
+      });
+      setShowNewSlideForm(false);
+    } catch (error) {
+      // Error already handled in hook
+    }
   };
 
-  const handleDeleteSlide = (id: number) => {
-    setHeroSlides(slides => slides.filter(slide => slide.id !== id));
-    toast({
-      title: "Slide removido!",
-      description: "O slide foi excluído com sucesso.",
-    });
+  const handleDeleteSlide = async (id: string) => {
+    try {
+      await deleteSlide(id);
+    } catch (error) {
+      // Error already handled in hook
+    }
   };
 
   // Catalogs Management
-  const handleSaveCatalog = (catalogData: Catalog) => {
-    setCatalogs(cats => cats.map(cat => 
-      cat.id === catalogData.id ? catalogData : cat
-    ));
-    setEditingCatalog(null);
-    toast({
-      title: "Catálogo atualizado!",
-      description: "As alterações foram salvas com sucesso.",
-    });
+  const handleSaveCatalog = async (catalogData: Catalog) => {
+    try {
+      await updateCatalog(catalogData.id, catalogData);
+      setEditingCatalog(null);
+    } catch (error) {
+      // Error already handled in hook
+    }
   };
 
-  const handleAddCatalog = () => {
-    if (!newCatalog.name || !newCatalog.image || !newCatalog.heroImage) {
+  const handleAddCatalog = async () => {
+    if (!newCatalog.name || !newCatalog.image || !newCatalog.hero_image) {
       toast({
         title: "Erro",
         description: "Nome, imagem e imagem do hero são obrigatórios.",
@@ -186,35 +114,41 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       return;
     }
 
-    const catalog: Catalog = {
-      ...newCatalog,
-      id: Math.max(...catalogs.map(c => c.id)) + 1
-    };
-    
-    setCatalogs(cats => [...cats, catalog]);
-    setNewCatalog({
-      name: '',
-      image: '',
-      description: '',
-      fullDescription: '',
-      heroImage: '',
-      heroCtaText: '',
-      products: []
-    });
-    setShowNewCatalogForm(false);
-    
-    toast({
-      title: "Catálogo adicionado!",
-      description: "Novo catálogo criado com sucesso.",
-    });
+    try {
+      const { products, ...catalogToAdd } = newCatalog;
+      const catalog = await addCatalog(catalogToAdd);
+      
+      // Add products if any
+      if (products.length > 0) {
+        await updateCatalog(catalog.id, { products: products.map(p => ({
+          ...p,
+          id: '',
+          catalog_id: catalog.id,
+          display_order: 0
+        })) });
+      }
+      
+      setNewCatalog({
+        name: '',
+        image: '',
+        description: '',
+        full_description: '',
+        hero_image: '',
+        hero_cta_text: '',
+        products: []
+      });
+      setShowNewCatalogForm(false);
+    } catch (error) {
+      // Error already handled in hook
+    }
   };
 
-  const handleDeleteCatalog = (id: number) => {
-    setCatalogs(cats => cats.filter(cat => cat.id !== id));
-    toast({
-      title: "Catálogo removido!",
-      description: "O catálogo foi excluído com sucesso.",
-    });
+  const handleDeleteCatalog = async (id: string) => {
+    try {
+      await deleteCatalog(id);
+    } catch (error) {
+      // Error already handled in hook
+    }
   };
 
   return (
@@ -297,80 +231,88 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               </button>
             </div>
 
-            {/* New Slide Form */}
-            {showNewSlideForm && (
-              <div className="mb-6 p-4 border rounded-lg bg-gray-50">
-                <h3 className="text-lg font-semibold mb-4">Novo Slide</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Título"
-                    value={newSlide.title}
-                    onChange={(e) => setNewSlide({...newSlide, title: e.target.value})}
-                    className="px-3 py-2 border rounded-lg"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Subtítulo"
-                    value={newSlide.subtitle}
-                    onChange={(e) => setNewSlide({...newSlide, subtitle: e.target.value})}
-                    className="px-3 py-2 border rounded-lg"
-                  />
-                  <input
-                    type="url"
-                    placeholder="URL da Imagem"
-                    value={newSlide.backgroundImage}
-                    onChange={(e) => setNewSlide({...newSlide, backgroundImage: e.target.value})}
-                    className="px-3 py-2 border rounded-lg"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Texto do Botão"
-                    value={newSlide.ctaText}
-                    onChange={(e) => setNewSlide({...newSlide, ctaText: e.target.value})}
-                    className="px-3 py-2 border rounded-lg"
-                  />
-                </div>
-                <textarea
-                  placeholder="Descrição"
-                  value={newSlide.description}
-                  onChange={(e) => setNewSlide({...newSlide, description: e.target.value})}
-                  rows={3}
-                  className="w-full mt-4 px-3 py-2 border rounded-lg"
-                />
-                <div className="flex gap-2 mt-4">
-                  <button
-                    onClick={handleAddSlide}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Salvar
-                  </button>
-                  <button
-                    onClick={() => setShowNewSlideForm(false)}
-                    className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
-                  >
-                    <X className="w-4 h-4 mr-2" />
-                    Cancelar
-                  </button>
-                </div>
+            {slidesLoading ? (
+              <div className="flex justify-center items-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin text-gold-600" />
               </div>
-            )}
+            ) : (
+              <>
+                {/* New Slide Form */}
+                {showNewSlideForm && (
+                  <div className="mb-6 p-4 border rounded-lg bg-gray-50">
+                    <h3 className="text-lg font-semibold mb-4">Novo Slide</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="Título"
+                        value={newSlide.title}
+                        onChange={(e) => setNewSlide({...newSlide, title: e.target.value})}
+                        className="px-3 py-2 border rounded-lg"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Subtítulo"
+                        value={newSlide.subtitle || ''}
+                        onChange={(e) => setNewSlide({...newSlide, subtitle: e.target.value})}
+                        className="px-3 py-2 border rounded-lg"
+                      />
+                      <input
+                        type="url"
+                        placeholder="URL da Imagem"
+                        value={newSlide.background_image}
+                        onChange={(e) => setNewSlide({...newSlide, background_image: e.target.value})}
+                        className="px-3 py-2 border rounded-lg"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Texto do Botão"
+                        value={newSlide.cta_text || ''}
+                        onChange={(e) => setNewSlide({...newSlide, cta_text: e.target.value})}
+                        className="px-3 py-2 border rounded-lg"
+                      />
+                    </div>
+                    <textarea
+                      placeholder="Descrição"
+                      value={newSlide.description || ''}
+                      onChange={(e) => setNewSlide({...newSlide, description: e.target.value})}
+                      rows={3}
+                      className="w-full mt-4 px-3 py-2 border rounded-lg"
+                    />
+                    <div className="flex gap-2 mt-4">
+                      <button
+                        onClick={handleAddSlide}
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center"
+                      >
+                        <Save className="w-4 h-4 mr-2" />
+                        Salvar
+                      </button>
+                      <button
+                        onClick={() => setShowNewSlideForm(false)}
+                        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                )}
 
-            {/* Slides List */}
-            <div className="space-y-4">
-              {heroSlides.map((slide) => (
-                <HeroSlideCard
-                  key={slide.id}
-                  slide={slide}
-                  isEditing={editingSlide === slide.id}
-                  onEdit={() => setEditingSlide(slide.id)}
-                  onSave={handleSaveSlide}
-                  onCancel={() => setEditingSlide(null)}
-                  onDelete={() => handleDeleteSlide(slide.id)}
-                />
-              ))}
-            </div>
+                {/* Slides List */}
+                <div className="space-y-4">
+                  {slides.map((slide) => (
+                    <HeroSlideCard
+                      key={slide.id}
+                      slide={slide}
+                      isEditing={editingSlide === slide.id}
+                      onEdit={() => setEditingSlide(slide.id)}
+                      onSave={handleSaveSlide}
+                      onCancel={() => setEditingSlide(null)}
+                      onDelete={() => handleDeleteSlide(slide.id)}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
 
@@ -390,101 +332,38 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               </button>
             </div>
 
-            {/* New Catalog Form */}
-            {showNewCatalogForm && (
-              <div className="mb-6 p-6 border rounded-lg bg-gray-50">
-                <h3 className="text-lg font-semibold mb-4">Novo Catálogo</h3>
-                
-                <div className="space-y-4">
-                  {/* Informações Básicas */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="Nome do Catálogo"
-                      value={newCatalog.name}
-                      onChange={(e) => setNewCatalog({...newCatalog, name: e.target.value})}
-                      className="px-3 py-2 border rounded-lg"
-                    />
-                    <input
-                      type="url"
-                      placeholder="URL da Imagem Principal"
-                      value={newCatalog.image}
-                      onChange={(e) => setNewCatalog({...newCatalog, image: e.target.value})}
-                      className="px-3 py-2 border rounded-lg"
-                    />
-                  </div>
-
-                  <textarea
-                    placeholder="Descrição Curta"
-                    value={newCatalog.description}
-                    onChange={(e) => setNewCatalog({...newCatalog, description: e.target.value})}
-                    rows={2}
-                    className="w-full px-3 py-2 border rounded-lg"
-                  />
-
-                  <textarea
-                    placeholder="Descrição Completa (Para página do catálogo)"
-                    value={newCatalog.fullDescription}
-                    onChange={(e) => setNewCatalog({...newCatalog, fullDescription: e.target.value})}
-                    rows={3}
-                    className="w-full px-3 py-2 border rounded-lg"
-                  />
-
-                  {/* Hero do Catálogo */}
-                  <div className="border-t pt-4">
-                    <h4 className="font-semibold mb-3">Hero da Página do Catálogo</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <input
-                        type="url"
-                        placeholder="URL da Imagem de Background do Hero"
-                        value={newCatalog.heroImage}
-                        onChange={(e) => setNewCatalog({...newCatalog, heroImage: e.target.value})}
-                        className="px-3 py-2 border rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Texto do Botão CTA"
-                        value={newCatalog.heroCtaText}
-                        onChange={(e) => setNewCatalog({...newCatalog, heroCtaText: e.target.value})}
-                        className="px-3 py-2 border rounded-lg"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 mt-6">
-                  <button
-                    onClick={handleAddCatalog}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Salvar
-                  </button>
-                  <button
-                    onClick={() => setShowNewCatalogForm(false)}
-                    className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
-                  >
-                    <X className="w-4 h-4 mr-2" />
-                    Cancelar
-                  </button>
-                </div>
+            {catalogsLoading ? (
+              <div className="flex justify-center items-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin text-gold-600" />
               </div>
-            )}
+            ) : (
+              <>
+                {/* New Catalog Form */}
+                {showNewCatalogForm && (
+                  <NewCatalogForm
+                    newCatalog={newCatalog}
+                    setNewCatalog={setNewCatalog}
+                    onSave={handleAddCatalog}
+                    onCancel={() => setShowNewCatalogForm(false)}
+                  />
+                )}
 
-            {/* Catalogs List */}
-            <div className="space-y-6">
-              {catalogs.map((catalog) => (
-                <CatalogCard
-                  key={catalog.id}
-                  catalog={catalog}
-                  isEditing={editingCatalog === catalog.id}
-                  onEdit={() => setEditingCatalog(catalog.id)}
-                  onSave={handleSaveCatalog}
-                  onCancel={() => setEditingCatalog(null)}
-                  onDelete={() => handleDeleteCatalog(catalog.id)}
-                />
-              ))}
-            </div>
+                {/* Catalogs List */}
+                <div className="space-y-6">
+                  {catalogs.map((catalog) => (
+                    <CatalogCard
+                      key={catalog.id}
+                      catalog={catalog}
+                      isEditing={editingCatalog === catalog.id}
+                      onEdit={() => setEditingCatalog(catalog.id)}
+                      onSave={handleSaveCatalog}
+                      onCancel={() => setEditingCatalog(null)}
+                      onDelete={() => handleDeleteCatalog(catalog.id)}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -520,28 +399,28 @@ const HeroSlideCard: React.FC<{
           />
           <input
             type="text"
-            value={editData.subtitle}
+            value={editData.subtitle || ''}
             onChange={(e) => setEditData({...editData, subtitle: e.target.value})}
             className="px-3 py-2 border rounded-lg"
             placeholder="Subtítulo"
           />
           <input
             type="url"
-            value={editData.backgroundImage}
-            onChange={(e) => setEditData({...editData, backgroundImage: e.target.value})}
+            value={editData.background_image}
+            onChange={(e) => setEditData({...editData, background_image: e.target.value})}
             className="px-3 py-2 border rounded-lg"
             placeholder="URL da Imagem"
           />
           <input
             type="text"
-            value={editData.ctaText}
-            onChange={(e) => setEditData({...editData, ctaText: e.target.value})}
+            value={editData.cta_text || ''}
+            onChange={(e) => setEditData({...editData, cta_text: e.target.value})}
             className="px-3 py-2 border rounded-lg"
             placeholder="Texto do Botão"
           />
         </div>
         <textarea
-          value={editData.description}
+          value={editData.description || ''}
           onChange={(e) => setEditData({...editData, description: e.target.value})}
           rows={3}
           className="w-full mt-4 px-3 py-2 border rounded-lg"
@@ -571,14 +450,14 @@ const HeroSlideCard: React.FC<{
     <div className="border rounded-lg p-4 flex items-center justify-between">
       <div className="flex items-center space-x-4">
         <img
-          src={slide.backgroundImage}
+          src={slide.background_image}
           alt={slide.title}
           className="w-16 h-16 object-cover rounded"
         />
         <div>
           <h3 className="font-semibold">{slide.title} {slide.subtitle}</h3>
           <p className="text-sm text-gray-600">{slide.description}</p>
-          <span className="text-xs text-gray-500">CTA: {slide.ctaText}</span>
+          <span className="text-xs text-gray-500">CTA: {slide.cta_text}</span>
         </div>
       </div>
       <div className="flex gap-2">
@@ -593,6 +472,163 @@ const HeroSlideCard: React.FC<{
           className="text-red-600 hover:text-red-800 p-2"
         >
           <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// New Catalog Form Component
+const NewCatalogForm: React.FC<{
+  newCatalog: any;
+  setNewCatalog: (catalog: any) => void;
+  onSave: () => void;
+  onCancel: () => void;
+}> = ({ newCatalog, setNewCatalog, onSave, onCancel }) => {
+  const addProduct = () => {
+    setNewCatalog({
+      ...newCatalog,
+      products: [...newCatalog.products, { name: '', image: '', description: '', display_order: 0 }]
+    });
+  };
+
+  const updateProduct = (index: number, field: string, value: string) => {
+    const updatedProducts = newCatalog.products.map((product: any, i: number) => 
+      i === index ? { ...product, [field]: value } : product
+    );
+    setNewCatalog({ ...newCatalog, products: updatedProducts });
+  };
+
+  const removeProduct = (index: number) => {
+    setNewCatalog({
+      ...newCatalog,
+      products: newCatalog.products.filter((_: any, i: number) => i !== index)
+    });
+  };
+
+  return (
+    <div className="mb-6 p-6 border rounded-lg bg-gray-50">
+      <h3 className="text-lg font-semibold mb-4">Novo Catálogo</h3>
+      
+      <div className="space-y-4">
+        {/* Informações Básicas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            placeholder="Nome do Catálogo"
+            value={newCatalog.name}
+            onChange={(e) => setNewCatalog({...newCatalog, name: e.target.value})}
+            className="px-3 py-2 border rounded-lg"
+          />
+          <input
+            type="url"
+            placeholder="URL da Imagem Principal"
+            value={newCatalog.image}
+            onChange={(e) => setNewCatalog({...newCatalog, image: e.target.value})}
+            className="px-3 py-2 border rounded-lg"
+          />
+        </div>
+
+        <textarea
+          placeholder="Descrição Curta"
+          value={newCatalog.description}
+          onChange={(e) => setNewCatalog({...newCatalog, description: e.target.value})}
+          rows={2}
+          className="w-full px-3 py-2 border rounded-lg"
+        />
+
+        <textarea
+          placeholder="Descrição Completa (Para página do catálogo)"
+          value={newCatalog.full_description}
+          onChange={(e) => setNewCatalog({...newCatalog, full_description: e.target.value})}
+          rows={3}
+          className="w-full px-3 py-2 border rounded-lg"
+        />
+
+        {/* Hero do Catálogo */}
+        <div className="border-t pt-4">
+          <h4 className="font-semibold mb-3">Hero da Página do Catálogo</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="url"
+              placeholder="URL da Imagem de Background do Hero"
+              value={newCatalog.hero_image}
+              onChange={(e) => setNewCatalog({...newCatalog, hero_image: e.target.value})}
+              className="px-3 py-2 border rounded-lg"
+            />
+            <input
+              type="text"
+              placeholder="Texto do Botão CTA"
+              value={newCatalog.hero_cta_text}
+              onChange={(e) => setNewCatalog({...newCatalog, hero_cta_text: e.target.value})}
+              className="px-3 py-2 border rounded-lg"
+            />
+          </div>
+        </div>
+
+        {/* Produtos */}
+        <div className="border-t pt-4">
+          <div className="flex justify-between items-center mb-3">
+            <h4 className="font-semibold">Produtos do Catálogo</h4>
+            <button
+              onClick={addProduct}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center"
+            >
+              <Plus className="w-3 h-3 mr-1" />
+              Adicionar Produto
+            </button>
+          </div>
+          
+          <div className="space-y-3">
+            {newCatalog.products.map((product: any, index: number) => (
+              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-2 p-3 border rounded bg-white">
+                <input
+                  type="text"
+                  placeholder="Nome do Produto"
+                  value={product.name}
+                  onChange={(e) => updateProduct(index, 'name', e.target.value)}
+                  className="px-2 py-1 border rounded text-sm"
+                />
+                <input
+                  type="url"
+                  placeholder="URL da Imagem"
+                  value={product.image}
+                  onChange={(e) => updateProduct(index, 'image', e.target.value)}
+                  className="px-2 py-1 border rounded text-sm"
+                />
+                <input
+                  type="text"
+                  placeholder="Descrição"
+                  value={product.description}
+                  onChange={(e) => updateProduct(index, 'description', e.target.value)}
+                  className="px-2 py-1 border rounded text-sm"
+                />
+                <button
+                  onClick={() => removeProduct(index)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-2 mt-6">
+        <button
+          onClick={onSave}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center"
+        >
+          <Save className="w-4 h-4 mr-2" />
+          Salvar
+        </button>
+        <button
+          onClick={onCancel}
+          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
+        >
+          <X className="w-4 h-4 mr-2" />
+          Cancelar
         </button>
       </div>
     </div>
@@ -617,12 +653,19 @@ const CatalogCard: React.FC<{
   const addProduct = () => {
     setEditData({
       ...editData,
-      products: [...editData.products, { name: '', image: '', description: '' }]
+      products: [...(editData.products || []), { 
+        id: '', 
+        catalog_id: editData.id, 
+        name: '', 
+        image: '', 
+        description: '', 
+        display_order: 0 
+      }]
     });
   };
 
-  const updateProduct = (index: number, field: keyof Product, value: string) => {
-    const updatedProducts = editData.products.map((product, i) => 
+  const updateProduct = (index: number, field: keyof CatalogProduct, value: string) => {
+    const updatedProducts = (editData.products || []).map((product, i) => 
       i === index ? { ...product, [field]: value } : product
     );
     setEditData({ ...editData, products: updatedProducts });
@@ -631,7 +674,7 @@ const CatalogCard: React.FC<{
   const removeProduct = (index: number) => {
     setEditData({
       ...editData,
-      products: editData.products.filter((_, i) => i !== index)
+      products: (editData.products || []).filter((_, i) => i !== index)
     });
   };
 
@@ -661,7 +704,7 @@ const CatalogCard: React.FC<{
 
           <textarea
             placeholder="Descrição Curta"
-            value={editData.description}
+            value={editData.description || ''}
             onChange={(e) => setEditData({...editData, description: e.target.value})}
             rows={2}
             className="w-full px-3 py-2 border rounded-lg"
@@ -669,8 +712,8 @@ const CatalogCard: React.FC<{
 
           <textarea
             placeholder="Descrição Completa"
-            value={editData.fullDescription}
-            onChange={(e) => setEditData({...editData, fullDescription: e.target.value})}
+            value={editData.full_description || ''}
+            onChange={(e) => setEditData({...editData, full_description: e.target.value})}
             rows={3}
             className="w-full px-3 py-2 border rounded-lg"
           />
@@ -682,15 +725,15 @@ const CatalogCard: React.FC<{
               <input
                 type="url"
                 placeholder="URL da Imagem de Background do Hero"
-                value={editData.heroImage}
-                onChange={(e) => setEditData({...editData, heroImage: e.target.value})}
+                value={editData.hero_image}
+                onChange={(e) => setEditData({...editData, hero_image: e.target.value})}
                 className="px-3 py-2 border rounded-lg"
               />
               <input
                 type="text"
                 placeholder="Texto do Botão CTA"
-                value={editData.heroCtaText}
-                onChange={(e) => setEditData({...editData, heroCtaText: e.target.value})}
+                value={editData.hero_cta_text || ''}
+                onChange={(e) => setEditData({...editData, hero_cta_text: e.target.value})}
                 className="px-3 py-2 border rounded-lg"
               />
             </div>
@@ -710,7 +753,7 @@ const CatalogCard: React.FC<{
             </div>
             
             <div className="space-y-3">
-              {editData.products.map((product, index) => (
+              {(editData.products || []).map((product, index) => (
                 <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-2 p-3 border rounded bg-white">
                   <input
                     type="text"
@@ -729,7 +772,7 @@ const CatalogCard: React.FC<{
                   <input
                     type="text"
                     placeholder="Descrição"
-                    value={product.description}
+                    value={product.description || ''}
                     onChange={(e) => updateProduct(index, 'description', e.target.value)}
                     className="px-2 py-1 border rounded text-sm"
                   />
@@ -781,17 +824,17 @@ const CatalogCard: React.FC<{
         <div>
           <h4 className="font-medium mb-2">Hero da Página</h4>
           <img
-            src={catalog.heroImage}
+            src={catalog.hero_image}
             alt="Hero"
             className="w-full h-20 object-cover rounded mb-2"
           />
-          <p className="text-xs text-gray-600">CTA: {catalog.heroCtaText}</p>
+          <p className="text-xs text-gray-600">CTA: {catalog.hero_cta_text}</p>
         </div>
         
         <div>
-          <h4 className="font-medium mb-2">Produtos ({catalog.products.length})</h4>
+          <h4 className="font-medium mb-2">Produtos ({catalog.products?.length || 0})</h4>
           <div className="grid grid-cols-3 gap-1">
-            {catalog.products.slice(0, 3).map((product, index) => (
+            {(catalog.products || []).slice(0, 3).map((product, index) => (
               <div key={index} className="text-center">
                 <img
                   src={product.image}
@@ -802,8 +845,8 @@ const CatalogCard: React.FC<{
               </div>
             ))}
           </div>
-          {catalog.products.length > 3 && (
-            <p className="text-xs text-gray-500 mt-1">+{catalog.products.length - 3} mais</p>
+          {(catalog.products?.length || 0) > 3 && (
+            <p className="text-xs text-gray-500 mt-1">+{(catalog.products?.length || 0) - 3} mais</p>
           )}
         </div>
       </div>

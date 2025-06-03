@@ -9,7 +9,116 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      catalog_products: {
+        Row: {
+          catalog_id: string
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          image: string
+          name: string
+        }
+        Insert: {
+          catalog_id: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image: string
+          name: string
+        }
+        Update: {
+          catalog_id?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_products_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "catalogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalogs: {
+        Row: {
+          created_at: string
+          description: string | null
+          full_description: string | null
+          hero_cta_text: string | null
+          hero_image: string
+          id: string
+          image: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          full_description?: string | null
+          hero_cta_text?: string | null
+          hero_image: string
+          id?: string
+          image: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          full_description?: string | null
+          hero_cta_text?: string | null
+          hero_image?: string
+          id?: string
+          image?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hero_slides: {
+        Row: {
+          background_image: string
+          created_at: string
+          cta_text: string | null
+          description: string | null
+          display_order: number
+          id: string
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          background_image: string
+          created_at?: string
+          cta_text?: string | null
+          description?: string | null
+          display_order?: number
+          id?: string
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          background_image?: string
+          created_at?: string
+          cta_text?: string | null
+          description?: string | null
+          display_order?: number
+          id?: string
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
