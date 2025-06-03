@@ -55,11 +55,11 @@ const Footer = () => {
               </div>
               <div className="flex items-center text-gray-300">
                 <i className="fas fa-envelope mr-3 text-gold-400"></i>
-                <span>contato@casapremium.com</span>
+                <span>contato@emporio.com</span>
               </div>
               <div className="flex items-start text-gray-300">
                 <i className="fas fa-map-marker-alt mr-3 text-gold-400 mt-1"></i>
-                <span>São Paulo, SP<br />Brasil</span>
+                <span>Rio de Janeiro, RJ<br />Brasil</span>
               </div>
             </div>
           </div>
