@@ -59,13 +59,13 @@ const Catalog = () => {
           <div className="text-center text-white">
             <h1 className="font-playfair text-5xl font-bold mb-4">{catalog.name}</h1>
             <p className="font-poppins text-xl mb-6">{catalog.description}</p>
-            <button
+{/*             <button
               onClick={handleWhatsAppClick}
               className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-poppins font-semibold transition-all duration-300 transform hover:scale-105 flex items-center mx-auto"
             >
               <i className="fab fa-whatsapp mr-3"></i>
               {catalog.hero_cta_text || 'Solicitar via WhatsApp'}
-            </button>
+            </button> */}
           </div>
         </div>
       </section>
