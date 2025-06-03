@@ -99,7 +99,7 @@ const AdminLogin: React.FC = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+{/*           <div className="mt-6 text-center">
             <button
               onClick={() => setIsSignUp(!isSignUp)}
               className="text-sm text-gold-600 hover:text-gold-700 font-medium font-inter"
@@ -118,7 +118,7 @@ const AdminLogin: React.FC = () => {
               </p>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
