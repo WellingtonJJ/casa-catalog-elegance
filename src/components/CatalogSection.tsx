@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import CatalogCard from './CatalogCard';
 import { useCatalogs } from '@/hooks/useCatalogs';
 
@@ -19,8 +20,8 @@ const CatalogSection = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {[1, 2, 3, 4].map((i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
               <div key={i} className="bg-white rounded-2xl shadow-xl overflow-hidden animate-pulse">
                 <div className="h-64 bg-gray-300"></div>
                 <div className="p-6">
@@ -46,6 +47,9 @@ const CatalogSection = () => {
     );
   }
 
+  // Mostrar apenas os primeiros 3 catálogos na home
+  const displayedCatalogs = catalogs.slice(0, 3);
+
   return (
     <section id="catalogs" className="py-20 bg-gradient-to-b from-cream-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,17 +69,32 @@ const CatalogSection = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {catalogs.map((catalog, index) => (
-              <div
-                key={catalog.id}
-                className="animate-slide-up"
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                <CatalogCard catalog={catalog} />
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {displayedCatalogs.map((catalog, index) => (
+                <div
+                  key={catalog.id}
+                  className="animate-slide-up"
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  <CatalogCard catalog={catalog} />
+                </div>
+              ))}
+            </div>
+
+            {/* Botão Ver Mais - só aparece se houver mais de 3 catálogos */}
+            {catalogs.length > 3 && (
+              <div className="text-center mt-12">
+                <Link
+                  to="/catalogs"
+                  className="bg-gold-600 hover:bg-gold-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 inline-flex items-center shadow-lg font-poppins"
+                >
+                  <i className="fas fa-eye mr-3"></i>
+                  Ver Mais Catálogos
+                </Link>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
 
         <div className="text-center mt-16">
