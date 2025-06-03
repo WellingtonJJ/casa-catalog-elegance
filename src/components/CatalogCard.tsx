@@ -1,19 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-interface Product {
-  name: string;
-  image: string;
-}
-
-interface Catalog {
-  id: number;
-  name: string;
-  image: string;
-  description: string;
-  products: Product[];
-}
+import { Catalog } from '@/hooks/useCatalogs';
 
 interface CatalogCardProps {
   catalog: Catalog;
@@ -57,22 +45,28 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
           Produtos em Destaque:
         </h4>
         
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          {catalog.products.map((product, index) => (
-            <div key={index} className="text-center">
-              <div className="relative h-20 w-full mb-2 rounded-lg overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                />
+        {catalog.products && catalog.products.length > 0 ? (
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            {catalog.products.slice(0, 3).map((product) => (
+              <div key={product.id} className="text-center">
+                <div className="relative h-20 w-full mb-2 rounded-lg overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                <p className="text-xs text-gray-600 font-poppins leading-tight">
+                  {product.name}
+                </p>
               </div>
-              <p className="text-xs text-gray-600 font-poppins leading-tight">
-                {product.name}
-              </p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="mb-6 text-center text-gray-500 py-8">
+            <p className="font-poppins">Produtos em breve...</p>
+          </div>
+        )}
 
         {/* Botões */}
         <div className="space-y-3">

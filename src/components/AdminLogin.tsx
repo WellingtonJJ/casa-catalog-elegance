@@ -1,34 +1,27 @@
 
 import React, { useState } from 'react';
-import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
-interface AdminLoginProps {
-  onLogin: () => void;
-}
-
-const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
+const AdminLogin: React.FC = () => {
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
   });
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { signIn, signUp } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     
-    // Simulação de login (não funcional ainda)
-    if (credentials.email === 'admin@casapremium.com' && credentials.password === 'admin123') {
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Bem-vindo ao painel administrativo.",
-      });
-      onLogin();
+    if (isSignUp) {
+      await signUp(credentials.email, credentials.password);
     } else {
-      toast({
-        title: "Erro no login",
-        description: "Email ou senha incorretos.",
-        variant: "destructive",
-      });
+      await signIn(credentials.email, credentials.password);
     }
+    
+    setLoading(false);
   };
 
   return (
@@ -39,7 +32,9 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
             <h2 className="font-playfair text-3xl font-bold text-gray-800">
               Casa <span className="text-gold-600">Premium</span>
             </h2>
-            <p className="mt-2 text-gray-600 font-inter">Painel Administrativo</p>
+            <p className="mt-2 text-gray-600 font-inter">
+              {isSignUp ? 'Criar Conta Admin' : 'Painel Administrativo'}
+            </p>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -87,20 +82,42 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-gold-600 to-gold-700 hover:from-gold-700 hover:to-gold-800 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg font-inter"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-gold-600 to-gold-700 hover:from-gold-700 hover:to-gold-800 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <i className="fas fa-sign-in-alt mr-2"></i>
-              Entrar
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Processando...
+                </div>
+              ) : (
+                <>
+                  <i className={`fas ${isSignUp ? 'fa-user-plus' : 'fa-sign-in-alt'} mr-2`}></i>
+                  {isSignUp ? 'Criar Conta' : 'Entrar'}
+                </>
+              )}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500 font-inter">
-              Credenciais de teste:<br />
-              <span className="font-medium">Email:</span> admin@casapremium.com<br />
-              <span className="font-medium">Senha:</span> admin123
-            </p>
+            <button
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-sm text-gold-600 hover:text-gold-700 font-medium font-inter"
+            >
+              {isSignUp 
+                ? 'Já tem uma conta? Faça login'
+                : 'Não tem uma conta? Cadastre-se'
+              }
+            </button>
           </div>
+
+          {!isSignUp && (
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-500 font-inter">
+                Para criar uma conta de administrador, clique em "Cadastre-se" acima.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
