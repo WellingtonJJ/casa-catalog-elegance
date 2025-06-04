@@ -33,10 +33,26 @@ const Footer = () => {
           <div>
             <h4 className="font-poppins text-lg font-semibold mb-6">Links Rápidos</h4>
             <ul className="space-y-3 font-poppins">
-              <li><a href="#" className="text-gray-300 hover:text-gold-400 transition-colors">Início</a></li>
-              <li><a href="#catalogs" className="text-gray-300 hover:text-gold-400 transition-colors">Catálogos</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-gold-400 transition-colors">Sobre Nós</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-gold-400 transition-colors">Contato</a></li>
+              <li>
+                <Link to="/" className="text-gray-300 hover:text-gold-400 transition-colors">
+                  Início
+                </Link>
+              </li>
+              <li>
+                <Link to="/catalogs" className="text-gray-300 hover:text-gold-400 transition-colors">
+                  Catálogos
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-gray-300 hover:text-gold-400 transition-colors">
+                  Sobre Nós
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-300 hover:text-gold-400 transition-colors">
+                  Contato
+                </Link>
+              </li>
               <li>
                 <Link to="/admin" className="text-gray-300 hover:text-gold-400 transition-colors">
                   Painel Admin
@@ -51,7 +67,7 @@ const Footer = () => {
             <div className="space-y-3 font-poppins">
               <div className="flex items-center text-gray-300">
                 <i className="fas fa-phone mr-3 text-gold-400"></i>
-                <span>(11) 99999-9999</span>
+                <span>(21) 96460-3524</span>
               </div>
               <div className="flex items-center text-gray-300">
                 <i className="fas fa-envelope mr-3 text-gold-400"></i>

@@ -32,6 +32,18 @@ const Navbar = () => {
                 Catálogos
               </Link>
               <Link
+                to="/about"
+                className="text-gray-800 hover:text-gold-600 px-3 py-2 text-sm font-medium transition-colors"
+              >
+                Sobre
+              </Link>
+              <Link
+                to="/contact"
+                className="text-gray-800 hover:text-gold-600 px-3 py-2 text-sm font-medium transition-colors"
+              >
+                Contato
+              </Link>
+              <Link
                 to="/admin"
                 className="bg-gold-600 text-white hover:bg-gold-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center"
               >
@@ -69,6 +81,20 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Catálogos
+              </Link>
+              <Link
+                to="/about"
+                className="text-gray-800 hover:text-gold-600 block px-3 py-2 text-base font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Sobre
+              </Link>
+              <Link
+                to="/contact"
+                className="text-gray-800 hover:text-gold-600 block px-3 py-2 text-base font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contato
               </Link>
               <Link
                 to="/admin"
