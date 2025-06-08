@@ -8,8 +8,10 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useHeroSlides } from '@/hooks/useHeroSlides';
+import type { CarouselApi } from "@/components/ui/carousel";
 
 const HeroSection = () => {
+  const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const { slides, loading } = useHeroSlides();
 
@@ -19,16 +21,33 @@ const HeroSection = () => {
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
 
+  // Update current slide when API changes
+  useEffect(() => {
+    if (!api) return;
+
+    const onSelect = () => {
+      setCurrentSlide(api.selectedScrollSnap());
+    };
+
+    api.on("select", onSelect);
+    onSelect();
+
+    return () => {
+      api?.off("select", onSelect);
+    };
+  }, [api]);
+
   // Auto-advance slides
   useEffect(() => {
-    if (slides.length === 0) return;
+    if (!api || slides.length === 0) return;
     
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      const nextIndex = (currentSlide + 1) % slides.length;
+      api.scrollTo(nextIndex);
     }, 6000);
 
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [api, currentSlide, slides.length]);
 
   if (loading) {
     return (
@@ -53,7 +72,7 @@ const HeroSection = () => {
   }
 
   return (
-    <Carousel className="relative">
+    <Carousel className="relative" setApi={setApi}>
       <CarouselContent>
         {slides.map((slide, index) => (
           <CarouselItem key={slide.id}>
@@ -80,8 +99,6 @@ const HeroSection = () => {
                 )}
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
-
-                  
                   <button
                     onClick={() => document.getElementById('catalogs')?.scrollIntoView({ behavior: 'smooth' })}
                     className="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 font-poppins"
@@ -105,7 +122,7 @@ const HeroSection = () => {
           {slides.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => api?.scrollTo(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === currentSlide ? 'bg-gold-400 scale-125' : 'bg-white/50 hover:bg-white/75'
               }`}
