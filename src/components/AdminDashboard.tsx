@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, Save, X, Loader2, Eye, Image, Users, BarChart3, Settings, HelpCircle, ExternalLink, Power, PowerOff } from 'lucide-react';
+import { 
+  Plus, Edit, Trash2, Save, X, Loader2, Eye, Image, Users, 
+  BarChart3, Settings, HelpCircle, ExternalLink, Power, PowerOff,
+  ChevronDown, LayoutGrid, List
+} from 'lucide-react';
 import { useHeroSlides, HeroSlide } from '@/hooks/useHeroSlides';
 import { useCatalogs, Catalog, CatalogProduct } from '@/hooks/useCatalogs';
 import { supabase } from '@/integrations/supabase/client';
@@ -15,6 +19,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [editingCatalog, setEditingCatalog] = useState<string | null>(null);
   const [showNewSlideForm, setShowNewSlideForm] = useState(false);
   const [showNewCatalogForm, setShowNewCatalogForm] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   const { slides, loading: slidesLoading, addSlide, updateSlide, deleteSlide } = useHeroSlides();
   const { catalogs, loading: catalogsLoading, addCatalog, updateCatalog, deleteCatalog, refetch } = useCatalogs();
@@ -222,19 +227,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Modern Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+      <header className="bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-gradient-to-r from-gold-500 to-gold-600 rounded-lg flex items-center justify-center mr-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-gold-500 to-gold-600 rounded-lg flex items-center justify-center mr-3">
                   <Settings className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="font-playfair text-xl font-bold text-gray-800">
+                  <h1 className="font-playfair text-xl font-bold">
                     Painel Administrativo
                   </h1>
-                  <p className="text-xs text-gray-500 font-poppins">EmpoRio - Casa Premium</p>
+                  <p className="text-xs text-gray-300 font-poppins">EmpoRio - Casa Premium</p>
                 </div>
               </div>
             </div>
@@ -242,7 +247,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => window.open('/', '_blank')}
-                className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors font-poppins text-sm"
+                className="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-100 rounded-lg transition-colors font-poppins text-sm"
               >
                 <Eye className="w-4 h-4 mr-2" />
                 Ver Site
@@ -262,12 +267,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Improved Navigation */}
         <div className="mb-8">
-          <nav className="flex space-x-1 bg-white p-1 rounded-lg shadow-sm">
+          <nav className="flex space-x-1 bg-white p-1 rounded-xl shadow">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`flex items-center px-4 py-3 rounded-md font-medium text-sm transition-all duration-200 font-poppins ${
+              className={`flex items-center px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 font-poppins ${
                 activeTab === 'overview'
-                  ? 'bg-gold-500 text-white shadow-md'
+                  ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-white shadow-md'
                   : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
               }`}
             >
@@ -276,25 +281,25 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             </button>
             <button
               onClick={() => setActiveTab('hero')}
-              className={`flex items-center px-4 py-3 rounded-md font-medium text-sm transition-all duration-200 font-poppins ${
+              className={`flex items-center px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 font-poppins ${
                 activeTab === 'hero'
-                  ? 'bg-gold-500 text-white shadow-md'
+                  ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-white shadow-md'
                   : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
               }`}
             >
               <Image className="w-4 h-4 mr-2" />
-              Slides da Página Inicial
+              Slides
             </button>
             <button
               onClick={() => setActiveTab('catalogs')}
-              className={`flex items-center px-4 py-3 rounded-md font-medium text-sm transition-all duration-200 font-poppins ${
+              className={`flex items-center px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 font-poppins ${
                 activeTab === 'catalogs'
-                  ? 'bg-gold-500 text-white shadow-md'
+                  ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-white shadow-md'
                   : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
               }`}
             >
               <i className="fas fa-book w-4 h-4 mr-2"></i>
-              Catálogos e Produtos
+              Catálogos
             </button>
           </nav>
         </div>
@@ -303,61 +308,61 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Welcome Card */}
-            <div className="bg-gradient-to-r from-gold-500 to-gold-600 rounded-xl p-8 text-white">
+            <div className="bg-gradient-to-r from-gold-500 to-gold-600 rounded-2xl p-8 text-white shadow-lg">
               <h2 className="text-3xl font-bold font-playfair mb-2">Bem-vindo ao Painel!</h2>
-              <p className="text-gold-100 font-poppins text-lg">
+              <p className="text-gold-100 font-poppins text-lg max-w-3xl">
                 Gerencie facilmente o conteúdo do seu site. Use as abas acima para navegar entre as diferentes seções.
               </p>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-6 shadow border border-gray-100 transition-transform hover:scale-[1.02]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600 font-poppins">Slides Ativos</p>
                     <p className="text-3xl font-bold text-gray-900 font-playfair">{totalSlides}</p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
                     <Image className="w-6 h-6 text-blue-600" />
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-2 font-poppins">Slides na página inicial</p>
               </div>
 
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-6 shadow border border-gray-100 transition-transform hover:scale-[1.02]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600 font-poppins">Catálogos Totais</p>
                     <p className="text-3xl font-bold text-gray-900 font-playfair">{totalCatalogs}</p>
                   </div>
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
                     <i className="fas fa-book text-green-600 text-xl"></i>
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-2 font-poppins">Catálogos disponíveis</p>
               </div>
 
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-6 shadow border border-gray-100 transition-transform hover:scale-[1.02]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600 font-poppins">Catálogos Ativos</p>
                     <p className="text-3xl font-bold text-gray-900 font-playfair">{activeCatalogs}</p>
                   </div>
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
                     <Power className="w-6 h-6 text-purple-600" />
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-2 font-poppins">Visíveis no site</p>
               </div>
 
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-6 shadow border border-gray-100 transition-transform hover:scale-[1.02]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600 font-poppins">Produtos Total</p>
                     <p className="text-3xl font-bold text-gray-900 font-playfair">{totalProducts}</p>
                   </div>
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
                     <Users className="w-6 h-6 text-orange-600" />
                   </div>
                 </div>
@@ -366,12 +371,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+            <div className="bg-white rounded-xl p-6 shadow border border-gray-100">
               <h3 className="text-lg font-semibold text-gray-800 mb-4 font-playfair">Ações Rápidas</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button
                   onClick={() => setActiveTab('hero')}
-                  className="flex items-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-gold-300 hover:bg-gold-50 transition-colors group"
+                  className="flex items-center p-4 border-2 border-dashed border-gray-200 rounded-xl hover:border-gold-300 hover:bg-gold-50 transition-all group"
                 >
                   <div className="w-10 h-10 bg-blue-100 group-hover:bg-blue-200 rounded-lg flex items-center justify-center mr-4">
                     <Plus className="w-5 h-5 text-blue-600" />
@@ -384,7 +389,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
                 <button
                   onClick={() => setActiveTab('catalogs')}
-                  className="flex items-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-gold-300 hover:bg-gold-50 transition-colors group"
+                  className="flex items-center p-4 border-2 border-dashed border-gray-200 rounded-xl hover:border-gold-300 hover:bg-gold-50 transition-all group"
                 >
                   <div className="w-10 h-10 bg-green-100 group-hover:bg-green-200 rounded-lg flex items-center justify-center mr-4">
                     <Plus className="w-5 h-5 text-green-600" />
@@ -398,14 +403,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             </div>
 
             {/* Help Card */}
-            <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-sm">
               <div className="flex items-start space-x-3">
-                <HelpCircle className="w-6 h-6 text-blue-600 mt-1" />
+                <HelpCircle className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="text-lg font-semibold text-blue-800 mb-2 font-playfair">Como usar este painel</h3>
                   <ul className="text-blue-700 space-y-1 font-poppins text-sm">
-                    <li>• Use "Slides da Página Inicial" para gerenciar as imagens e textos que aparecem no topo do site</li>
-                    <li>• Use "Catálogos e Produtos" para criar e editar os catálogos que os clientes veem</li>
+                    <li>• Use "Slides" para gerenciar as imagens e textos que aparecem no topo do site</li>
+                    <li>• Use "Catálogos" para criar e editar os catálogos que os clientes veem</li>
                     <li>• Sempre preencha os campos obrigatórios antes de salvar</li>
                     <li>• Use imagens de boa qualidade (recomendado: mínimo 1200px de largura)</li>
                   </ul>
@@ -417,8 +422,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
         {/* Hero Carousel Management */}
         {activeTab === 'hero' && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-            <div className="flex justify-between items-center mb-6">
+          <div className="bg-white rounded-xl shadow border border-gray-100 p-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800 font-playfair">
                   Slides da Página Inicial
@@ -427,13 +432,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   Gerencie as imagens e textos que aparecem no topo da página inicial
                 </p>
               </div>
-              <button
-                onClick={() => setShowNewSlideForm(true)}
-                className="flex items-center px-4 py-2 bg-gold-600 hover:bg-gold-700 text-white rounded-lg font-poppins transition-colors"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Novo Slide
-              </button>
+              <div className="flex gap-3 w-full md:w-auto">
+                <button
+                  onClick={() => setShowNewSlideForm(true)}
+                  className="flex items-center px-4 py-2 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white rounded-lg font-poppins transition-all shadow-md"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Slide
+                </button>
+                <div className="bg-gray-100 rounded-lg p-1 flex">
+                  <button 
+                    onClick={() => setViewMode('grid')} 
+                    className={`p-2 rounded-md ${viewMode === 'grid' ? 'bg-white shadow' : 'text-gray-500'}`}
+                    title="Visualização em grade"
+                  >
+                    <LayoutGrid className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => setViewMode('list')} 
+                    className={`p-2 rounded-md ${viewMode === 'list' ? 'bg-white shadow' : 'text-gray-500'}`}
+                    title="Visualização em lista"
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
 
             {slidesLoading ? (
@@ -445,10 +468,18 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               <>
                 {/* New Slide Form */}
                 {showNewSlideForm && (
-                  <div className="mb-6 p-6 border-2 border-dashed border-gold-200 rounded-lg bg-gold-50">
-                    <div className="flex items-center mb-4">
-                      <Plus className="w-5 h-5 text-gold-600 mr-2" />
-                      <h3 className="text-lg font-semibold text-gold-800 font-playfair">Adicionar Novo Slide</h3>
+                  <div className="mb-6 p-6 border-2 border-dashed border-gold-200 rounded-xl bg-gold-50">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center">
+                        <Plus className="w-5 h-5 text-gold-600 mr-2" />
+                        <h3 className="text-lg font-semibold text-gold-800 font-playfair">Adicionar Novo Slide</h3>
+                      </div>
+                      <button 
+                        onClick={() => setShowNewSlideForm(false)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -515,7 +546,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     <div className="flex gap-3 mt-6">
                       <button
                         onClick={handleAddSlide}
-                        className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-poppins transition-colors"
+                        className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-poppins transition-colors shadow"
                       >
                         <Save className="w-4 h-4 mr-2" />
                         Salvar Slide
@@ -533,17 +564,18 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
                 {/* Slides List */}
                 {slides.length === 0 ? (
-                  <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-lg">
+                  <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl">
                     <Image className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-gray-600 font-playfair mb-2">Nenhum slide criado</h3>
                     <p className="text-gray-500 font-poppins">Clique em "Novo Slide" para começar</p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'space-y-4'}`}>
                     {slides.map((slide) => (
                       <HeroSlideCard
                         key={slide.id}
                         slide={slide}
+                        viewMode={viewMode}
                         isEditing={editingSlide === slide.id}
                         onEdit={() => setEditingSlide(slide.id)}
                         onSave={handleSaveSlide}
@@ -560,8 +592,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
         {/* Catalogs Management */}
         {activeTab === 'catalogs' && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-            <div className="flex justify-between items-center mb-6">
+          <div className="bg-white rounded-xl shadow border border-gray-100 p-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800 font-playfair">
                   Catálogos e Produtos
@@ -570,13 +602,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   Crie e gerencie os catálogos que seus clientes verão
                 </p>
               </div>
-              <button
-                onClick={() => setShowNewCatalogForm(true)}
-                className="flex items-center px-4 py-2 bg-gold-600 hover:bg-gold-700 text-white rounded-lg font-poppins transition-colors"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Novo Catálogo
-              </button>
+              <div className="flex gap-3 w-full md:w-auto">
+                <button
+                  onClick={() => setShowNewCatalogForm(true)}
+                  className="flex items-center px-4 py-2 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white rounded-lg font-poppins transition-all shadow-md"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Catálogo
+                </button>
+                <div className="bg-gray-100 rounded-lg p-1 flex">
+                  <button 
+                    onClick={() => setViewMode('grid')} 
+                    className={`p-2 rounded-md ${viewMode === 'grid' ? 'bg-white shadow' : 'text-gray-500'}`}
+                    title="Visualização em grade"
+                  >
+                    <LayoutGrid className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => setViewMode('list')} 
+                    className={`p-2 rounded-md ${viewMode === 'list' ? 'bg-white shadow' : 'text-gray-500'}`}
+                    title="Visualização em lista"
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
 
             {catalogsLoading ? (
@@ -598,17 +648,18 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
                 {/* Catalogs List */}
                 {catalogs.length === 0 ? (
-                  <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-lg">
+                  <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl">
                     <i className="fas fa-book text-6xl text-gray-400 mb-4"></i>
                     <h3 className="text-lg font-medium text-gray-600 font-playfair mb-2">Nenhum catálogo criado</h3>
                     <p className="text-gray-500 font-poppins">Clique em "Novo Catálogo" para começar</p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'space-y-4'}`}>
                     {catalogs.map((catalog) => (
                       <CatalogCard
                         key={catalog.id}
                         catalog={catalog}
+                        viewMode={viewMode}
                         isEditing={editingCatalog === catalog.id}
                         onEdit={() => setEditingCatalog(catalog.id)}
                         onSave={handleSaveCatalog}
@@ -632,12 +683,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 // Hero Slide Card Component with improved UI
 const HeroSlideCard: React.FC<{
   slide: HeroSlide;
+  viewMode: 'grid' | 'list';
   isEditing: boolean;
   onEdit: () => void;
   onSave: (slide: HeroSlide) => void;
   onCancel: () => void;
   onDelete: () => void;
-}> = ({ slide, isEditing, onEdit, onSave, onCancel, onDelete }) => {
+}> = ({ slide, viewMode, isEditing, onEdit, onSave, onCancel, onDelete }) => {
   const [editData, setEditData] = useState(slide);
 
   const handleSave = () => {
@@ -646,10 +698,18 @@ const HeroSlideCard: React.FC<{
 
   if (isEditing) {
     return (
-      <div className="border-2 border-blue-200 rounded-lg p-6 bg-blue-50">
-        <div className="flex items-center mb-4">
-          <Edit className="w-5 h-5 text-blue-600 mr-2" />
-          <h3 className="text-lg font-semibold text-blue-800 font-playfair">Editando Slide</h3>
+      <div className="border-2 border-blue-200 rounded-xl p-6 bg-blue-50">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <Edit className="w-5 h-5 text-blue-600 mr-2" />
+            <h3 className="text-lg font-semibold text-blue-800 font-playfair">Editando Slide</h3>
+          </div>
+          <button 
+            onClick={onCancel}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -706,7 +766,7 @@ const HeroSlideCard: React.FC<{
         <div className="flex gap-3 mt-6">
           <button
             onClick={handleSave}
-            className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-poppins transition-colors"
+            className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-poppins transition-colors shadow"
           >
             <Save className="w-4 h-4 mr-2" />
             Salvar Alterações
@@ -723,18 +783,63 @@ const HeroSlideCard: React.FC<{
     );
   }
 
-  return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-md transition-shadow">
-      <div className="flex items-center p-4">
+  return viewMode === 'grid' ? (
+    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white hover:shadow-md transition-shadow h-full flex flex-col">
+      <div className="relative h-40">
         <img
           src={slide.background_image}
           alt={slide.title}
-          className="w-20 h-20 object-cover rounded-lg border border-gray-200"
+          className="w-full h-full object-cover"
           onError={(e) => {
-            e.currentTarget.src = 'https://via.placeholder.com/80x80?text=Imagem';
+            e.currentTarget.src = 'https://via.placeholder.com/600x160?text=Imagem+Slide';
           }}
         />
-        <div className="ml-4 flex-1">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+          <h3 className="font-semibold text-white font-playfair text-lg truncate">
+            {slide.title}
+          </h3>
+        </div>
+      </div>
+      <div className="p-4 flex-1 flex flex-col">
+        {slide.subtitle && (
+          <p className="text-gold-600 font-poppins text-sm mb-2">{slide.subtitle}</p>
+        )}
+        <p className="text-gray-600 font-poppins text-sm mb-3 line-clamp-2">{slide.description}</p>
+        {slide.cta_text && (
+          <span className="inline-block mt-auto px-2 py-1 bg-gold-100 text-gold-800 text-xs rounded font-poppins w-fit">
+            Botão: {slide.cta_text}
+          </span>
+        )}
+        <div className="flex gap-2 mt-4 pt-3 border-t border-gray-100">
+          <button
+            onClick={onEdit}
+            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            title="Editar slide"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+          <button
+            onClick={onDelete}
+            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            title="Excluir slide"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white hover:shadow-md transition-shadow">
+      <div className="flex flex-col md:flex-row items-start p-4">
+        <img
+          src={slide.background_image}
+          alt={slide.title}
+          className="w-full md:w-32 h-32 object-cover rounded-lg border border-gray-200"
+          onError={(e) => {
+            e.currentTarget.src = 'https://via.placeholder.com/128x128?text=Imagem';
+          }}
+        />
+        <div className="ml-0 md:ml-4 mt-3 md:mt-0 flex-1">
           <h3 className="font-semibold text-gray-800 font-playfair text-lg">
             {slide.title} {slide.subtitle && <span className="text-gold-600">{slide.subtitle}</span>}
           </h3>
@@ -745,7 +850,7 @@ const HeroSlideCard: React.FC<{
             </span>
           )}
         </div>
-        <div className="flex gap-2 ml-4">
+        <div className="flex gap-2 mt-3 md:mt-0 ml-auto">
           <button
             onClick={onEdit}
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -795,10 +900,18 @@ const NewCatalogForm: React.FC<{
   };
 
   return (
-    <div className="mb-6 p-6 border-2 border-dashed border-gold-200 rounded-lg bg-gold-50">
-      <div className="flex items-center mb-4">
-        <Plus className="w-5 h-5 text-gold-600 mr-2" />
-        <h3 className="text-lg font-semibold text-gold-800 font-playfair">Adicionar Novo Catálogo</h3>
+    <div className="mb-6 p-6 border-2 border-dashed border-gold-200 rounded-xl bg-gold-50">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center">
+          <Plus className="w-5 h-5 text-gold-600 mr-2" />
+          <h3 className="text-lg font-semibold text-gold-800 font-playfair">Adicionar Novo Catálogo</h3>
+        </div>
+        <button 
+          onClick={onCancel}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
       
       <div className="space-y-4">
@@ -881,7 +994,7 @@ const NewCatalogForm: React.FC<{
             <h4 className="font-semibold font-playfair text-gray-800">Produtos do Catálogo</h4>
             <button
               onClick={addProduct}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm flex items-center font-poppins transition-colors"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-2 rounded-lg text-sm flex items-center font-poppins transition-colors shadow"
             >
               <Plus className="w-3 h-3 mr-1" />
               Adicionar Produto
@@ -890,31 +1003,40 @@ const NewCatalogForm: React.FC<{
           
           <div className="space-y-3">
             {(newCatalog.products || []).map((product: any, index: number) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-2 p-3 border border-gray-200 rounded-lg bg-white">
-                <input
-                  type="text"
-                  placeholder="Nome do Produto"
-                  value={product.name}
-                  onChange={(e) => updateProduct(index, 'name', e.target.value)}
-                  className="px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                />
-                <input
-                  type="url"
-                  placeholder="URL da Imagem"
-                  value={product.image}
-                  onChange={(e) => updateProduct(index, 'image', e.target.value)}
-                  className="px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                />
-                <input
-                  type="text"
-                  placeholder="Descrição"
-                  value={product.description || ''}
-                  onChange={(e) => updateProduct(index, 'description', e.target.value)}
-                  className="px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                />
+              <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr_auto] gap-3 p-3 border border-gray-200 rounded-lg bg-white">
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1 font-poppins">Nome</label>
+                  <input
+                    type="text"
+                    placeholder="Nome do Produto"
+                    value={product.name}
+                    onChange={(e) => updateProduct(index, 'name', e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1 font-poppins">Imagem</label>
+                  <input
+                    type="url"
+                    placeholder="URL da Imagem"
+                    value={product.image}
+                    onChange={(e) => updateProduct(index, 'image', e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1 font-poppins">Descrição</label>
+                  <input
+                    type="text"
+                    placeholder="Descrição"
+                    value={product.description || ''}
+                    onChange={(e) => updateProduct(index, 'description', e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                  />
+                </div>
                 <button
                   onClick={() => removeProduct(index)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm flex items-center justify-center transition-colors"
+                  className="self-end bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-sm flex items-center justify-center transition-colors"
                   title="Remover produto"
                 >
                   <Trash2 className="w-3 h-3" />
@@ -922,7 +1044,9 @@ const NewCatalogForm: React.FC<{
               </div>
             ))}
             {(!newCatalog.products || newCatalog.products.length === 0) && (
-              <p className="text-gray-500 text-sm italic font-poppins">Nenhum produto adicionado ainda. Clique em "Adicionar Produto" para começar.</p>
+              <p className="text-gray-500 text-sm italic font-poppins text-center py-4">
+                Nenhum produto adicionado ainda. Clique em "Adicionar Produto" para começar.
+              </p>
             )}
           </div>
         </div>
@@ -931,7 +1055,7 @@ const NewCatalogForm: React.FC<{
       <div className="flex gap-2 mt-6">
         <button
           onClick={onSave}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center font-poppins transition-colors"
+          className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-lg flex items-center font-poppins transition-colors shadow"
         >
           <Save className="w-4 h-4 mr-2" />
           Salvar Catálogo
@@ -950,6 +1074,7 @@ const NewCatalogForm: React.FC<{
 
 const CatalogCard: React.FC<{
   catalog: Catalog;
+  viewMode: 'grid' | 'list';
   isEditing: boolean;
   onEdit: () => void;
   onSave: (catalog: Catalog) => void;
@@ -957,8 +1082,9 @@ const CatalogCard: React.FC<{
   onDelete: () => void;
   onToggleActive: () => void;
   onPreview: () => void;
-}> = ({ catalog, isEditing, onEdit, onSave, onCancel, onDelete, onToggleActive, onPreview }) => {
+}> = ({ catalog, viewMode, isEditing, onEdit, onSave, onCancel, onDelete, onToggleActive, onPreview }) => {
   const [editData, setEditData] = useState(catalog);
+  const [expanded, setExpanded] = useState(false);
 
   const handleSave = () => {
     onSave(editData);
@@ -994,10 +1120,18 @@ const CatalogCard: React.FC<{
 
   if (isEditing) {
     return (
-      <div className="border-2 border-blue-200 rounded-lg p-6 bg-blue-50">
-        <div className="flex items-center mb-4">
-          <Edit className="w-5 h-5 text-blue-600 mr-2" />
-          <h3 className="text-lg font-semibold text-blue-800 font-playfair">Editando: {catalog.name}</h3>
+      <div className="border-2 border-blue-200 rounded-xl p-6 bg-blue-50">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <Edit className="w-5 h-5 text-blue-600 mr-2" />
+            <h3 className="text-lg font-semibold text-blue-800 font-playfair">Editando: {catalog.name}</h3>
+          </div>
+          <button 
+            onClick={onCancel}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
         
         <div className="space-y-4">
@@ -1103,7 +1237,7 @@ const CatalogCard: React.FC<{
               <h4 className="font-semibold font-playfair text-gray-800">Produtos do Catálogo</h4>
               <button
                 onClick={addProduct}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center font-poppins transition-colors"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-2 rounded text-sm flex items-center font-poppins transition-colors shadow"
               >
                 <Plus className="w-3 h-3 mr-1" />
                 Adicionar Produto
@@ -1112,31 +1246,40 @@ const CatalogCard: React.FC<{
             
             <div className="space-y-3">
               {(editData.products || []).map((product, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-2 p-3 border border-gray-200 rounded bg-white">
-                  <input
-                    type="text"
-                    placeholder="Nome do Produto"
-                    value={product.name}
-                    onChange={(e) => updateProduct(index, 'name', e.target.value)}
-                    className="px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                  />
-                  <input
-                    type="url"
-                    placeholder="URL da Imagem"
-                    value={product.image}
-                    onChange={(e) => updateProduct(index, 'image', e.target.value)}
-                    className="px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Descrição"
-                    value={product.description || ''}
-                    onChange={(e) => updateProduct(index, 'description', e.target.value)}
-                    className="px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                  />
+                <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr_auto] gap-3 p-3 border border-gray-200 rounded bg-white">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Nome</label>
+                    <input
+                      type="text"
+                      placeholder="Nome do Produto"
+                      value={product.name}
+                      onChange={(e) => updateProduct(index, 'name', e.target.value)}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Imagem</label>
+                    <input
+                      type="url"
+                      placeholder="URL da Imagem"
+                      value={product.image}
+                      onChange={(e) => updateProduct(index, 'image', e.target.value)}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Descrição</label>
+                    <input
+                      type="text"
+                      placeholder="Descrição"
+                      value={product.description || ''}
+                      onChange={(e) => updateProduct(index, 'description', e.target.value)}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                    />
+                  </div>
                   <button
                     onClick={() => removeProduct(index)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm flex items-center justify-center transition-colors"
+                    className="self-end bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-sm flex items-center justify-center transition-colors"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -1149,7 +1292,7 @@ const CatalogCard: React.FC<{
         <div className="flex gap-2 mt-6">
           <button
             onClick={handleSave}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center font-poppins transition-colors"
+            className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-lg flex items-center font-poppins transition-colors shadow"
           >
             <Save className="w-4 h-4 mr-2" />
             Salvar Alterações
@@ -1166,18 +1309,80 @@ const CatalogCard: React.FC<{
     );
   }
 
-  return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-md transition-shadow">
-      <div className="flex items-center p-4">
+  return viewMode === 'grid' ? (
+    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white hover:shadow-md transition-shadow h-full flex flex-col">
+      <div className="relative h-48">
         <img
           src={catalog.image}
           alt={catalog.name}
-          className="w-20 h-20 object-cover rounded-lg border border-gray-200"
+          className="w-full h-full object-cover"
           onError={(e) => {
-            e.currentTarget.src = 'https://via.placeholder.com/80x80?text=Catálogo';
+            e.currentTarget.src = 'https://via.placeholder.com/600x192?text=Imagem+Catálogo';
           }}
         />
-        <div className="ml-4 flex-1">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+          <div>
+            <h3 className="font-semibold text-white font-playfair text-lg truncate">
+              {catalog.name}
+            </h3>
+            <span className={`inline-flex items-center mt-1 px-2 py-1 rounded-full text-xs ${
+              catalog.active 
+                ? 'bg-green-100 text-green-800' 
+                : 'bg-red-100 text-red-800'
+            }`}>
+              {catalog.active ? 'Ativo' : 'Inativo'}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="p-4 flex-1 flex flex-col">
+        <p className="text-gray-600 font-poppins text-sm mb-3 line-clamp-2">{catalog.description}</p>
+        <div className="mt-auto flex justify-between items-center">
+          <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded font-poppins">
+            {catalog.products?.length || 0} produtos
+          </span>
+          <div className="flex gap-2">
+            <button
+              onClick={onPreview}
+              className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+              title="Visualizar catálogo"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onToggleActive}
+              className={`p-2 rounded-lg transition-colors ${
+                catalog.active 
+                  ? 'text-orange-600 hover:bg-orange-50' 
+                  : 'text-green-600 hover:bg-green-50'
+              }`}
+              title={catalog.active ? 'Desativar catálogo' : 'Ativar catálogo'}
+            >
+              {catalog.active ? <PowerOff className="w-4 h-4" /> : <Power className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={onEdit}
+              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              title="Editar catálogo"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white hover:shadow-md transition-shadow">
+      <div className="flex flex-col md:flex-row items-start p-4">
+        <img
+          src={catalog.image}
+          alt={catalog.name}
+          className="w-full md:w-32 h-32 object-cover rounded-lg border border-gray-200"
+          onError={(e) => {
+            e.currentTarget.src = 'https://via.placeholder.com/128x128?text=Catálogo';
+          }}
+        />
+        <div className="ml-0 md:ml-4 mt-3 md:mt-0 flex-1">
           <div className="flex items-center gap-3">
             <h3 className="font-semibold text-gray-800 font-playfair text-lg">
               {catalog.name}
@@ -1212,7 +1417,7 @@ const CatalogCard: React.FC<{
             )}
           </div>
         </div>
-        <div className="flex gap-2 ml-4">
+        <div className="flex gap-2 mt-3 md:mt-0 ml-auto">
           <button
             onClick={onPreview}
             className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
