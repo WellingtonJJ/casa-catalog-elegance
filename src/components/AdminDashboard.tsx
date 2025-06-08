@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, Save, X, Loader2, Eye, Image, Users, BarChart3, Settings, HelpCircle } from 'lucide-react';
 import { useHeroSlides, HeroSlide } from '@/hooks/useHeroSlides';
 import { useCatalogs, Catalog, CatalogProduct } from '@/hooks/useCatalogs';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -16,7 +18,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [showNewCatalogForm, setShowNewCatalogForm] = useState(false);
   
   const { slides, loading: slidesLoading, addSlide, updateSlide, deleteSlide } = useHeroSlides();
-  const { catalogs, loading: catalogsLoading, addCatalog, updateCatalog, deleteCatalog } = useCatalogs();
+  const { catalogs, loading: catalogsLoading, addCatalog, updateCatalog, deleteCatalog, refetch } = useCatalogs();
 
   const [newSlide, setNewSlide] = useState<Omit<HeroSlide, 'id'>>({
     title: '',
@@ -118,19 +120,48 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
     try {
       const { products, ...catalogToAdd } = newCatalog;
+      
+      // Create the catalog first
       const catalog = await addCatalog(catalogToAdd);
       
-      // Add products if any
+      // If there are products, add them directly using Supabase
       if (products && products.length > 0) {
-        const productsWithIds = products.map((p, index) => ({
-          ...p,
-          id: '',
+        const productsToInsert = products.map((product, index) => ({
           catalog_id: catalog.id,
+          name: product.name,
+          image: product.image,
+          description: product.description,
           display_order: index + 1
         }));
-        await updateCatalog(catalog.id, { products: productsWithIds });
+
+        const { error: productsError } = await supabase
+          .from('catalog_products')
+          .insert(productsToInsert);
+
+        if (productsError) {
+          console.error('Error adding products:', productsError);
+          toast({
+            title: "Aviso",
+            description: "Catálogo criado, mas houve erro ao adicionar alguns produtos. Você pode editá-los posteriormente.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Catálogo criado!",
+            description: `Catálogo criado com sucesso com ${products.length} produtos.`,
+          });
+        }
+      } else {
+        toast({
+          title: "Catálogo criado!",
+          description: "Catálogo criado com sucesso.",
+        });
       }
       
+      // Refresh the catalogs list to show the new catalog with products
+      await refetch();
+      
+      // Reset form
       setNewCatalog({
         name: '',
         image: '',
@@ -143,6 +174,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       setShowNewCatalogForm(false);
     } catch (error) {
       console.error('Error adding catalog:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível criar o catálogo.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -875,7 +911,6 @@ const NewCatalogForm: React.FC<{
   );
 };
 
-// Enhanced Catalog Card Component usando o estilo de cards dos slides
 const CatalogCard: React.FC<{
   catalog: Catalog;
   isEditing: boolean;
