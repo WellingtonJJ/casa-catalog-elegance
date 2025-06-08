@@ -20,6 +20,7 @@ export interface Catalog {
   full_description: string | null;
   hero_image: string;
   hero_cta_text: string | null;
+  active: boolean;
   products?: CatalogProduct[];
 }
 

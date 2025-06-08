@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, Save, X, Loader2, Eye, Image, Users, BarChart3, Settings, HelpCircle } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, Loader2, Eye, Image, Users, BarChart3, Settings, HelpCircle, ExternalLink, Power, PowerOff } from 'lucide-react';
 import { useHeroSlides, HeroSlide } from '@/hooks/useHeroSlides';
 import { useCatalogs, Catalog, CatalogProduct } from '@/hooks/useCatalogs';
 import { supabase } from '@/integrations/supabase/client';
@@ -192,9 +191,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     }
   };
 
+  const handleToggleCatalogActive = async (catalog: Catalog) => {
+    try {
+      const newActiveState = !catalog.active;
+      await updateCatalog(catalog.id, { active: newActiveState });
+      toast({
+        title: newActiveState ? "Catálogo ativado!" : "Catálogo desativado!",
+        description: `O catálogo foi ${newActiveState ? 'ativado' : 'desativado'} com sucesso.`,
+      });
+    } catch (error) {
+      console.error('Error toggling catalog active state:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível alterar o status do catálogo.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handlePreviewCatalog = (catalogId: string) => {
+    window.open(`/catalog/${catalogId}`, '_blank');
+  };
+
   // Calculate stats for overview
   const totalSlides = slides.length;
   const totalCatalogs = catalogs.length;
+  const activeCatalogs = catalogs.filter(catalog => catalog.active).length;
   const totalProducts = catalogs.reduce((sum, catalog) => sum + (catalog.products?.length || 0), 0);
 
   return (
@@ -289,7 +311,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between">
                   <div>
@@ -306,7 +328,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 font-poppins">Catálogos</p>
+                    <p className="text-sm font-medium text-gray-600 font-poppins">Catálogos Totais</p>
                     <p className="text-3xl font-bold text-gray-900 font-playfair">{totalCatalogs}</p>
                   </div>
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -319,11 +341,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between">
                   <div>
+                    <p className="text-sm font-medium text-gray-600 font-poppins">Catálogos Ativos</p>
+                    <p className="text-3xl font-bold text-gray-900 font-playfair">{activeCatalogs}</p>
+                  </div>
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Power className="w-6 h-6 text-purple-600" />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2 font-poppins">Visíveis no site</p>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between">
+                  <div>
                     <p className="text-sm font-medium text-gray-600 font-poppins">Produtos Total</p>
                     <p className="text-3xl font-bold text-gray-900 font-playfair">{totalProducts}</p>
                   </div>
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-6 h-6 text-purple-600" />
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-6 h-6 text-orange-600" />
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-2 font-poppins">Em todos os catálogos</p>
@@ -579,6 +614,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                         onSave={handleSaveCatalog}
                         onCancel={() => setEditingCatalog(null)}
                         onDelete={() => handleDeleteCatalog(catalog.id)}
+                        onToggleActive={() => handleToggleCatalogActive(catalog)}
+                        onPreview={() => handlePreviewCatalog(catalog.id)}
                       />
                     ))}
                   </div>
@@ -918,7 +955,9 @@ const CatalogCard: React.FC<{
   onSave: (catalog: Catalog) => void;
   onCancel: () => void;
   onDelete: () => void;
-}> = ({ catalog, isEditing, onEdit, onSave, onCancel, onDelete }) => {
+  onToggleActive: () => void;
+  onPreview: () => void;
+}> = ({ catalog, isEditing, onEdit, onSave, onCancel, onDelete, onToggleActive, onPreview }) => {
   const [editData, setEditData] = useState(catalog);
 
   const handleSave = () => {
@@ -986,26 +1025,49 @@ const CatalogCard: React.FC<{
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Descrição Curta</label>
-            <textarea
-              placeholder="Descrição Curta"
-              value={editData.description || ''}
-              onChange={(e) => setEditData({...editData, description: e.target.value})}
-              rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
-            />
+          <div className="flex items-center space-x-3">
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={editData.active}
+                onChange={(e) => setEditData({...editData, active: e.target.checked})}
+                className="sr-only"
+              />
+              <div className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                editData.active ? 'bg-green-600' : 'bg-gray-200'
+              }`}>
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  editData.active ? 'translate-x-6' : 'translate-x-1'
+                }`} />
+              </div>
+              <span className="ml-3 text-sm font-medium text-gray-700 font-poppins">
+                {editData.active ? 'Catálogo Ativo' : 'Catálogo Inativo'}
+              </span>
+            </label>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Descrição Completa</label>
-            <textarea
-              placeholder="Descrição Completa"
-              value={editData.full_description || ''}
-              onChange={(e) => setEditData({...editData, full_description: e.target.value})}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
-            />
+          {/* Informações Básicas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Descrição Curta</label>
+              <textarea
+                placeholder="Descrição Curta"
+                value={editData.description || ''}
+                onChange={(e) => setEditData({...editData, description: e.target.value})}
+                rows={2}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Descrição Completa</label>
+              <textarea
+                placeholder="Descrição Completa"
+                value={editData.full_description || ''}
+                onChange={(e) => setEditData({...editData, full_description: e.target.value})}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
+              />
+            </div>
           </div>
 
           {/* Hero do Catálogo */}
@@ -1104,7 +1166,6 @@ const CatalogCard: React.FC<{
     );
   }
 
-  // Card style similar to HeroSlideCard
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-md transition-shadow">
       <div className="flex items-center p-4">
@@ -1117,9 +1178,28 @@ const CatalogCard: React.FC<{
           }}
         />
         <div className="ml-4 flex-1">
-          <h3 className="font-semibold text-gray-800 font-playfair text-lg">
-            {catalog.name}
-          </h3>
+          <div className="flex items-center gap-3">
+            <h3 className="font-semibold text-gray-800 font-playfair text-lg">
+              {catalog.name}
+            </h3>
+            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+              catalog.active 
+                ? 'bg-green-100 text-green-800' 
+                : 'bg-red-100 text-red-800'
+            }`}>
+              {catalog.active ? (
+                <>
+                  <Power className="w-3 h-3 mr-1" />
+                  Ativo
+                </>
+              ) : (
+                <>
+                  <PowerOff className="w-3 h-3 mr-1" />
+                  Inativo
+                </>
+              )}
+            </span>
+          </div>
           <p className="text-gray-600 font-poppins text-sm mt-1">{catalog.description}</p>
           <div className="flex items-center gap-4 mt-2">
             <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded font-poppins">
@@ -1133,6 +1213,24 @@ const CatalogCard: React.FC<{
           </div>
         </div>
         <div className="flex gap-2 ml-4">
+          <button
+            onClick={onPreview}
+            className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+            title="Visualizar catálogo"
+          >
+            <ExternalLink className="w-4 h-4" />
+          </button>
+          <button
+            onClick={onToggleActive}
+            className={`p-2 rounded-lg transition-colors ${
+              catalog.active 
+                ? 'text-orange-600 hover:bg-orange-50' 
+                : 'text-green-600 hover:bg-green-50'
+            }`}
+            title={catalog.active ? 'Desativar catálogo' : 'Ativar catálogo'}
+          >
+            {catalog.active ? <PowerOff className="w-4 h-4" /> : <Power className="w-4 h-4" />}
+          </button>
           <button
             onClick={onEdit}
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
