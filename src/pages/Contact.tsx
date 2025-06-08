@@ -66,7 +66,7 @@ ${formData.message}`;
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-gray-800 to-gray-900 text-white">
+      <section className="relative bg-gradient-to-r from-gray-800 to-gray-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-playfair text-5xl md:text-6xl font-bold mb-6">
             Entre em <span className="text-gold-400">Contato</span>
