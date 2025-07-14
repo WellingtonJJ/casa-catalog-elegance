@@ -12,6 +12,8 @@ const Index = () => {
       <HeroSection />
       <CatalogSection />
       <Footer />
+      {/* Espaçamento para o menu mobile inferior */}
+      <div className="h-16 md:hidden"></div>
     </div>
   );
 };

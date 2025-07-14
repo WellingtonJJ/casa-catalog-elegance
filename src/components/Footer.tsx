@@ -10,7 +10,7 @@ const Footer = () => {
           {/* Logo e Descrição */}
           <div className="col-span-1 md:col-span-2">
             <h3 className="font-playfair text-3xl font-bold mb-4">
-              Empo<span className="text-gold-400">Rio</span>
+              Impo<span className="text-gold-400">Rio</span>
             </h3>
             <p className="text-gray-300 mb-6 font-poppins leading-relaxed">
               Transformamos casas em lares especiais através de utensílios cuidadosamente selecionados. 
@@ -53,11 +53,6 @@ const Footer = () => {
                   Contato
                 </Link>
               </li>
-              <li>
-                <Link to="/admin" className="text-gray-300 hover:text-gold-400 transition-colors">
-                  Painel Admin
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -71,7 +66,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center text-gray-300">
                 <i className="fas fa-envelope mr-3 text-gold-400"></i>
-                <span>contato@emporio.com</span>
+                <span>contato@imporio.com</span>
               </div>
               <div className="flex items-start text-gray-300">
                 <i className="fas fa-map-marker-alt mr-3 text-gold-400 mt-1"></i>
@@ -83,7 +78,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center">
           <p className="text-gray-400 font-poppins">
-            &copy; 2024 EmpoRio. Todos os direitos reservados.
+            &copy; 2024 ImpoRio. Todos os direitos reservados.
           </p>
         </div>
       </div>
