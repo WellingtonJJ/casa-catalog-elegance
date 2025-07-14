@@ -40,6 +40,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     full_description: '',
     hero_image: '',
     hero_cta_text: '',
+    active: true,
     products: []
   });
 
@@ -173,6 +174,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         full_description: '',
         hero_image: '',
         hero_cta_text: '',
+        active: true,
         products: []
       });
       setShowNewCatalogForm(false);
@@ -239,7 +241,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   <h1 className="font-playfair text-xl font-bold">
                     Painel Administrativo
                   </h1>
-                  <p className="text-xs text-gray-300 font-poppins">EmpoRio - Casa Premium</p>
+                  <p className="text-xs text-gray-300 font-poppins">ImpoRio - Casa Premium</p>
                 </div>
               </div>
             </div>
