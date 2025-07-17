@@ -1,13 +1,15 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import ProductModal from '../components/ProductModal';
 import { useCatalogs } from '@/hooks/useCatalogs';
 
 const Catalog = () => {
   const { id } = useParams();
   const { catalogs, loading } = useCatalogs();
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (loading) {
     return (
@@ -49,6 +51,16 @@ const Catalog = () => {
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
 
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <div className="min-h-screen bg-cream-50">
       <Navbar />
@@ -59,13 +71,6 @@ const Catalog = () => {
           <div className="text-center text-white">
             <h1 className="font-playfair text-5xl font-bold mb-4">{catalog.name}</h1>
             <p className="font-poppins text-xl mb-6">{catalog.description}</p>
-{/*             <button
-              onClick={handleWhatsAppClick}
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-poppins font-semibold transition-all duration-300 transform hover:scale-105 flex items-center mx-auto"
-            >
-              <i className="fab fa-whatsapp mr-3"></i>
-              {catalog.hero_cta_text || 'Solicitar via WhatsApp'}
-            </button> */}
           </div>
         </div>
       </section>
@@ -91,7 +96,11 @@ const Catalog = () => {
                 {catalog.products
                   .sort((a, b) => a.display_order - b.display_order)
                   .map((product) => (
-                    <div key={product.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div 
+                      key={product.id} 
+                      className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+                      onClick={() => handleProductClick(product)}
+                    >
                       <div className="h-64 overflow-hidden">
                         <img
                           src={product.image}
@@ -102,8 +111,11 @@ const Catalog = () => {
                       <div className="p-6">
                         <h4 className="font-poppins text-lg font-semibold text-gray-800 mb-2">{product.name}</h4>
                         {product.description && (
-                          <p className="font-poppins text-gray-600 text-sm">{product.description}</p>
+                          <p className="font-poppins text-gray-600 text-sm line-clamp-3">{product.description}</p>
                         )}
+                        <div className="mt-4 text-gold-600 font-poppins text-sm font-medium">
+                          Clique para ver mais detalhes
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -133,6 +145,12 @@ const Catalog = () => {
           </div>
         </div>
       </section>
+
+      <ProductModal
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
 
       <Footer />
     </div>

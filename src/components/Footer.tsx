@@ -9,9 +9,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo e Descrição */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="font-playfair text-3xl font-bold mb-4">
-              Impo<span className="text-gold-400">Rio</span>
-            </h3>
+            <div className="mb-4">
+              <img 
+                src="/lovable-uploads/be3f153d-caa8-409b-bac1-0ff2db598c56.png" 
+                alt="ImpoRio" 
+                className="h-12 w-auto"
+              />
+            </div>
             <p className="text-gray-300 mb-6 font-poppins leading-relaxed">
               Transformamos casas em lares especiais através de utensílios cuidadosamente selecionados. 
               Nossa missão é oferecer produtos de qualidade premium que elevam o padrão do seu lar.
