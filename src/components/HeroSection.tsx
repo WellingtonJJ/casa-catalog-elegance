@@ -3,9 +3,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useSwipeable } from 'react-swipeable';
 import { useHeroSlides } from '@/hooks/useHeroSlides';
 
 const HeroSection = () => {
@@ -23,17 +22,26 @@ const HeroSection = () => {
     return () => clearInterval(timer);
   }, [slides.length]);
 
-  // Funções para os botões
+  // Navegação manual
   const handleNext = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
+
   const handlePrev = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  // Swipe handler
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: handleNext,
+    onSwipedRight: handlePrev,
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
+
   if (loading) {
     return (
-      <section className="relative h-screen flex items-center justify-center bg-gray-900">
+      <section className="relative h-[70vh] md:h-screen flex items-center justify-center bg-gray-900">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gold-400 mx-auto"></div>
           <p className="text-white mt-4 font-poppins">Carregando...</p>
@@ -44,7 +52,7 @@ const HeroSection = () => {
 
   if (slides.length === 0) {
     return (
-      <section className="relative h-screen flex items-center justify-center bg-gray-900">
+      <section className="relative h-[70vh] md:h-screen flex items-center justify-center bg-gray-900">
         <div className="text-center text-white">
           <h1 className="font-playfair text-4xl mb-4">Casa Premium</h1>
           <p className="font-poppins">Nenhum slide encontrado</p>
@@ -54,7 +62,7 @@ const HeroSection = () => {
   }
 
   return (
-    <Carousel className="relative">
+    <Carousel className="relative" {...swipeHandlers}>
       <CarouselContent>
         {slides.map((slide, index) => (
           <CarouselItem
@@ -62,23 +70,25 @@ const HeroSection = () => {
             style={{ display: index === currentSlide ? 'block' : 'none' }}
           >
             <section
-              className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+              className="relative h-[70vh] md:h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${slide.background_image})`
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
 
-              <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 className="font-playfair text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
+              <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-0">
+                <h1 className="font-playfair text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6 animate-fade-in">
                   {slide.title}
                   {slide.subtitle && (
-                    <span className="block text-gold-400">{slide.subtitle}</span>
+                    <span className="block text-gold-400 text-2xl md:text-3xl lg:text-4xl mt-2">
+                      {slide.subtitle}
+                    </span>
                   )}
                 </h1>
 
                 {slide.description && (
-                  <p className="text-xl md:text-2xl text-cream-100 mb-8 max-w-2xl mx-auto leading-relaxed animate-slide-up font-poppins">
+                  <p className="text-lg md:text-xl lg:text-2xl text-cream-100 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed animate-slide-up font-poppins">
                     {slide.description}
                   </p>
                 )}
@@ -86,14 +96,10 @@ const HeroSection = () => {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
                   <button
                     onClick={() => document.getElementById('catalogs')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 font-poppins"
+                    className="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-6 py-3 md:px-8 md:py-4 rounded-lg text-base md:text-lg font-semibold transition-all duration-400 font-poppins"
                   >
                     Ver Catálogos
                   </button>
-                </div>
-
-                <div className="mt-12 animate-bounce">
-                  <i className="fas fa-chevron-down text-white text-2xl opacity-70"></i>
                 </div>
               </div>
             </section>
@@ -101,34 +107,20 @@ const HeroSection = () => {
         ))}
       </CarouselContent>
 
-      {/* Indicadores */}
+      {/* Indicadores de slide */}
       {slides.length > 1 && (
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+        <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
           {slides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-3 h-3 rounded-full transition-all duration-400 ${
                 index === currentSlide ? 'bg-gold-400 scale-125' : 'bg-white/50 hover:bg-white/75'
               }`}
               aria-label={`Ir para o slide ${index + 1}`}
             />
           ))}
         </div>
-      )}
-
-      {/* Controles do Carrossel */}
-      {slides.length > 1 && (
-        <>
-          <CarouselPrevious
-            onClick={handlePrev}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/20 border-white/30 text-white hover:bg-black/40 z-20"
-          />
-          <CarouselNext
-            onClick={handleNext}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/20 border-white/30 text-white hover:bg-black/40 z-20"
-          />
-        </>
       )}
     </Carousel>
   );

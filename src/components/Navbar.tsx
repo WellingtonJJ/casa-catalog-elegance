@@ -53,14 +53,14 @@ const Navbar = () => {
             </div>
 
             {/* Menu Mobile Button */}
-            <div className="md:hidden">
+            {/* <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="text-gray-800 hover:text-gold-600 focus:outline-none"
               >
                 <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'} text-xl`}></i>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>
@@ -81,7 +81,7 @@ const Navbar = () => {
             className="flex flex-col items-center py-2 px-3 text-gray-600 hover:text-gold-600 transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
-            <i className="fas fa-th-large text-lg mb-1"></i>
+            <i className="fas fa-tags text-lg mb-1"></i>
             <span className="text-xs font-medium">Catálogos</span>
           </Link>
           <Link
