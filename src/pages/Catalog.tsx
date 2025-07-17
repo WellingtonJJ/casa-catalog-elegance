@@ -75,9 +75,9 @@ const Catalog = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Descrição Completa */}
           {catalog.full_description && (
-            <div className="mb-12 text-justify">
+            <div className="mb-12 text-center">
               <h2 className="font-playfair text-3xl font-bold text-gray-800 mb-6">Sobre este Catálogo</h2>
-              <p className="font-poppins text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              <p className="font-poppins text-justify text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
                 {catalog.full_description}
               </p>
             </div>
