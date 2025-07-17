@@ -66,12 +66,12 @@ ${formData.message}`;
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-gray-800 to-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative bg-gradient-to-r from-gray-800 to-gray-900 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="font-playfair text-5xl md:text-6xl font-bold mb-6">
             Entre em <span className="text-gold-400">Contato</span>
           </h1>
-          <p className="text-xl md:text-2xl text-cream-100 max-w-3xl mx-auto leading-relaxed font-poppins">
+          <p className="text-xl md:text-2xl text-cream-100 max-w-2xl mx-auto leading-relaxed font-poppins">
             Estamos aqui para ajudar você a criar o lar dos seus sonhos
           </p>
         </div>

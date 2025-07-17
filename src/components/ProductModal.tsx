@@ -67,10 +67,10 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
     <>
       {/* Modal Principal */}
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent 
-          className="max-w-4xl p-0 overflow-hidden rounded-3xl shadow-2xl border-0 bg-white"
-          onInteractOutside={(e) => e.preventDefault()} // Previne fechamento ao clicar fora
-        >
+      <DialogContent 
+  className="max-w-4xl p-0 overflow-hidden rounded-3xl shadow-2xl border-0 bg-white"
+>
+
           <DialogHeader className="sr-only">
             <DialogTitle>Detalhes do Produto</DialogTitle>
           </DialogHeader>
