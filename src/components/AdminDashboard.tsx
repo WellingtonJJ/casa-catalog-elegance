@@ -8,6 +8,7 @@ import {
 import { useHeroSlides, HeroSlide } from '@/hooks/useHeroSlides';
 import { useCatalogs, Catalog, CatalogProduct } from '@/hooks/useCatalogs';
 import { supabase } from '@/integrations/supabase/client';
+import ImageUpload from './ImageUpload';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -508,16 +509,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
                         />
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">
-                          URL da Imagem de Fundo *
-                        </label>
-                        <input
-                          type="url"
-                          placeholder="https://exemplo.com/imagem.jpg"
+                      <div className="md:col-span-2">
+                        <ImageUpload
                           value={newSlide.background_image}
-                          onChange={(e) => setNewSlide({...newSlide, background_image: e.target.value})}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
+                          onChange={(url) => setNewSlide({...newSlide, background_image: url})}
+                          folder="slides"
+                          label="Imagem de Fundo"
+                          required
+                          placeholder="URL da imagem de fundo do slide"
                         />
                       </div>
                       <div>
@@ -682,7 +681,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   );
 };
 
-// Hero Slide Card Component with improved UI
+// Hero Slide Card Component with improved UI and ImageUpload
 const HeroSlideCard: React.FC<{
   slide: HeroSlide;
   viewMode: 'grid' | 'list';
@@ -734,14 +733,14 @@ const HeroSlideCard: React.FC<{
               placeholder="Subtítulo"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">URL da Imagem</label>
-            <input
-              type="url"
+          <div className="md:col-span-2">
+            <ImageUpload
               value={editData.background_image}
-              onChange={(e) => setEditData({...editData, background_image: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
-              placeholder="URL da Imagem"
+              onChange={(url) => setEditData({...editData, background_image: url})}
+              folder="slides"
+              label="Imagem de Fundo"
+              required
+              placeholder="URL da imagem de fundo do slide"
             />
           </div>
           <div>
@@ -873,7 +872,7 @@ const HeroSlideCard: React.FC<{
   );
 };
 
-// New Catalog Form Component
+// New Catalog Form Component with ImageUpload
 const NewCatalogForm: React.FC<{
   newCatalog: any;
   setNewCatalog: (catalog: any) => void;
@@ -929,16 +928,25 @@ const NewCatalogForm: React.FC<{
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">URL da Imagem Principal *</label>
-            <input
-              type="url"
-              placeholder="https://exemplo.com/imagem.jpg"
-              value={newCatalog.image}
-              onChange={(e) => setNewCatalog({...newCatalog, image: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
-            />
-          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ImageUpload
+            value={newCatalog.image}
+            onChange={(url) => setNewCatalog({...newCatalog, image: url})}
+            folder="catalogs"
+            label="Imagem Principal"
+            required
+            placeholder="Imagem que aparece na listagem de catálogos"
+          />
+          <ImageUpload
+            value={newCatalog.hero_image}
+            onChange={(url) => setNewCatalog({...newCatalog, hero_image: url})}
+            folder="catalogs/hero"
+            label="Imagem de Fundo do Hero"
+            required
+            placeholder="Imagem de fundo da página do catálogo"
+          />
         </div>
 
         <div>
@@ -963,31 +971,15 @@ const NewCatalogForm: React.FC<{
           />
         </div>
 
-        {/* Hero do Catálogo */}
-        <div className="border-t pt-4">
-          <h4 className="font-semibold mb-3 font-playfair text-gray-800">Hero da Página do Catálogo</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">URL da Imagem de Fundo *</label>
-              <input
-                type="url"
-                placeholder="https://exemplo.com/hero-image.jpg"
-                value={newCatalog.hero_image}
-                onChange={(e) => setNewCatalog({...newCatalog, hero_image: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Texto do Botão CTA</label>
-              <input
-                type="text"
-                placeholder="Ex: Entrar em Contato"
-                value={newCatalog.hero_cta_text || ''}
-                onChange={(e) => setNewCatalog({...newCatalog, hero_cta_text: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
-              />
-            </div>
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Texto do Botão CTA</label>
+          <input
+            type="text"
+            placeholder="Ex: Entrar em Contato"
+            value={newCatalog.hero_cta_text || ''}
+            onChange={(e) => setNewCatalog({...newCatalog, hero_cta_text: e.target.value})}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
+          />
         </div>
 
         {/* Produtos */}
@@ -1003,46 +995,49 @@ const NewCatalogForm: React.FC<{
             </button>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-4">
             {(newCatalog.products || []).map((product: any, index: number) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr_auto] gap-3 p-3 border border-gray-200 rounded-lg bg-white">
-                <div>
-                  <label className="block text-xs text-gray-500 mb-1 font-poppins">Nome</label>
-                  <input
-                    type="text"
-                    placeholder="Nome do Produto"
-                    value={product.name}
-                    onChange={(e) => updateProduct(index, 'name', e.target.value)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                  />
+              <div key={index} className="p-4 border border-gray-200 rounded-lg bg-white space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Nome do Produto</label>
+                    <input
+                      type="text"
+                      placeholder="Nome do Produto"
+                      value={product.name}
+                      onChange={(e) => updateProduct(index, 'name', e.target.value)}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Descrição</label>
+                    <input
+                      type="text"
+                      placeholder="Descrição do produto"
+                      value={product.description || ''}
+                      onChange={(e) => updateProduct(index, 'description', e.target.value)}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs text-gray-500 mb-1 font-poppins">Imagem</label>
-                  <input
-                    type="url"
-                    placeholder="URL da Imagem"
-                    value={product.image}
-                    onChange={(e) => updateProduct(index, 'image', e.target.value)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                  />
+                <div className="flex items-end gap-3">
+                  <div className="flex-1">
+                    <ImageUpload
+                      value={product.image}
+                      onChange={(url) => updateProduct(index, 'image', url)}
+                      folder="products"
+                      label="Imagem do Produto"
+                      placeholder="Imagem do produto"
+                    />
+                  </div>
+                  <button
+                    onClick={() => removeProduct(index)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-sm flex items-center justify-center transition-colors h-10"
+                    title="Remover produto"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-                <div>
-                  <label className="block text-xs text-gray-500 mb-1 font-poppins">Descrição</label>
-                  <input
-                    type="text"
-                    placeholder="Descrição"
-                    value={product.description || ''}
-                    onChange={(e) => updateProduct(index, 'description', e.target.value)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                  />
-                </div>
-                <button
-                  onClick={() => removeProduct(index)}
-                  className="self-end bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-sm flex items-center justify-center transition-colors"
-                  title="Remover produto"
-                >
-                  <Trash2 className="w-3 h-3" />
-                </button>
               </div>
             ))}
             {(!newCatalog.products || newCatalog.products.length === 0) && (
@@ -1149,16 +1144,6 @@ const CatalogCard: React.FC<{
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">URL da Imagem Principal</label>
-              <input
-                type="url"
-                placeholder="URL da Imagem Principal"
-                value={editData.image}
-                onChange={(e) => setEditData({...editData, image: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
-              />
-            </div>
           </div>
 
           <div className="flex items-center space-x-3">
@@ -1182,7 +1167,25 @@ const CatalogCard: React.FC<{
             </label>
           </div>
 
-          {/* Informações Básicas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ImageUpload
+              value={editData.image}
+              onChange={(url) => setEditData({...editData, image: url})}
+              folder="catalogs"
+              label="Imagem Principal"
+              required
+              placeholder="Imagem que aparece na listagem"
+            />
+            <ImageUpload
+              value={editData.hero_image}
+              onChange={(url) => setEditData({...editData, hero_image: url})}
+              folder="catalogs/hero"
+              label="Imagem de Fundo do Hero"
+              required
+              placeholder="Imagem de fundo da página do catálogo"
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Descrição Curta</label>
@@ -1206,31 +1209,15 @@ const CatalogCard: React.FC<{
             </div>
           </div>
 
-          {/* Hero do Catálogo */}
-          <div className="border-t pt-4">
-            <h4 className="font-semibold mb-3 font-playfair text-gray-800">Hero da Página</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">URL da Imagem de Fundo</label>
-                <input
-                  type="url"
-                  placeholder="URL da Imagem de Background do Hero"
-                  value={editData.hero_image}
-                  onChange={(e) => setEditData({...editData, hero_image: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Texto do Botão CTA</label>
-                <input
-                  type="text"
-                  placeholder="Texto do Botão CTA"
-                  value={editData.hero_cta_text || ''}
-                  onChange={(e) => setEditData({...editData, hero_cta_text: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
-                />
-              </div>
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">Texto do Botão CTA</label>
+            <input
+              type="text"
+              placeholder="Texto do Botão CTA"
+              value={editData.hero_cta_text || ''}
+              onChange={(e) => setEditData({...editData, hero_cta_text: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-poppins"
+            />
           </div>
 
           {/* Produtos */}
@@ -1246,45 +1233,48 @@ const CatalogCard: React.FC<{
               </button>
             </div>
             
-            <div className="space-y-3">
+            <div className="space-y-4">
               {(editData.products || []).map((product, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr_auto] gap-3 p-3 border border-gray-200 rounded bg-white">
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Nome</label>
-                    <input
-                      type="text"
-                      placeholder="Nome do Produto"
-                      value={product.name}
-                      onChange={(e) => updateProduct(index, 'name', e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                    />
+                <div key={index} className="p-4 border border-gray-200 rounded bg-white space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1 font-poppins">Nome</label>
+                      <input
+                        type="text"
+                        placeholder="Nome do Produto"
+                        value={product.name}
+                        onChange={(e) => updateProduct(index, 'name', e.target.value)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1 font-poppins">Descrição</label>
+                      <input
+                        type="text"
+                        placeholder="Descrição"
+                        value={product.description || ''}
+                        onChange={(e) => updateProduct(index, 'description', e.target.value)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Imagem</label>
-                    <input
-                      type="url"
-                      placeholder="URL da Imagem"
-                      value={product.image}
-                      onChange={(e) => updateProduct(index, 'image', e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                    />
+                  <div className="flex items-end gap-3">
+                    <div className="flex-1">
+                      <ImageUpload
+                        value={product.image}
+                        onChange={(url) => updateProduct(index, 'image', url)}
+                        folder="products"
+                        label="Imagem do Produto"
+                        placeholder="Imagem do produto"
+                      />
+                    </div>
+                    <button
+                      onClick={() => removeProduct(index)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-sm flex items-center justify-center transition-colors h-10"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Descrição</label>
-                    <input
-                      type="text"
-                      placeholder="Descrição"
-                      value={product.description || ''}
-                      onChange={(e) => updateProduct(index, 'description', e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
-                    />
-                  </div>
-                  <button
-                    onClick={() => removeProduct(index)}
-                    className="self-end bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-sm flex items-center justify-center transition-colors"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
                 </div>
               ))}
             </div>
