@@ -52,25 +52,63 @@ export const useCatalogs = () => {
     }
   };
 
-  const addCatalog = async (catalogData: Omit<Catalog, 'id' | 'products'>) => {
+  const addCatalog = async (catalogData: Omit<Catalog, 'id' | 'products'>, products?: Omit<CatalogProduct, 'id' | 'catalog_id'>[]) => {
     try {
-      const { data, error } = await supabase
+      console.log('Creating catalog with data:', catalogData);
+      console.log('Products to add:', products);
+
+      // First, create the catalog
+      const { data: catalog, error: catalogError } = await supabase
         .from('catalogs')
         .insert([catalogData])
         .select()
         .single();
 
-      if (error) throw error;
+      if (catalogError) {
+        console.error('Error creating catalog:', catalogError);
+        throw catalogError;
+      }
+
+      console.log('Catalog created successfully:', catalog);
+
+      // If there are products, add them
+      if (products && products.length > 0) {
+        console.log('Adding products to catalog:', catalog.id);
+        
+        const productsToInsert = products.map((product, index) => ({
+          catalog_id: catalog.id,
+          name: product.name,
+          image: product.image,
+          description: product.description,
+          display_order: index + 1
+        }));
+
+        console.log('Products to insert:', productsToInsert);
+
+        const { data: insertedProducts, error: productsError } = await supabase
+          .from('catalog_products')
+          .insert(productsToInsert)
+          .select();
+
+        if (productsError) {
+          console.error('Error adding products:', productsError);
+          throw productsError;
+        }
+
+        console.log('Products inserted successfully:', insertedProducts);
+      }
+
+      // Refetch all catalogs to get the updated data with products
+      await fetchCatalogs();
       
-      const newCatalog = { ...data, products: [] };
-      setCatalogs(prev => [...prev, newCatalog]);
       toast({
-        title: "Catálogo adicionado!",
-        description: "Novo catálogo criado com sucesso.",
+        title: "Catálogo criado!",
+        description: `Catálogo criado com sucesso${products && products.length > 0 ? ` com ${products.length} produtos` : ''}.`,
       });
-      return data;
+
+      return catalog;
     } catch (error) {
-      console.error('Error adding catalog:', error);
+      console.error('Error in addCatalog:', error);
       toast({
         title: "Erro",
         description: "Não foi possível adicionar o catálogo.",
