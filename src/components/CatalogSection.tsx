@@ -47,10 +47,8 @@ const CatalogSection = () => {
     );
   }
 
-  // Filtrar apenas os catálogos ativos e em destaque para a página inicial
-  const featuredCatalogs = catalogs.filter(catalog => catalog.active && catalog.featured);
-  // Se não há catálogos em destaque, mostrar os primeiros 3 ativos
-  const displayedCatalogs = featuredCatalogs.length > 0 ? featuredCatalogs : catalogs.filter(catalog => catalog.active).slice(0, 3);
+  // Mostrar apenas os primeiros 3 catálogos na home
+  const displayedCatalogs = catalogs.slice(0, 3);
 
   return (
     <section id="catalogs" className="py-20 bg-gradient-to-b from-cream-50 to-white">
@@ -64,7 +62,7 @@ const CatalogSection = () => {
           </p>
         </div>
 
-        {displayedCatalogs.length === 0 ? (
+        {catalogs.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-xl text-gray-600 font-poppins">
               Nenhum catálogo disponível no momento.
@@ -84,15 +82,15 @@ const CatalogSection = () => {
               ))}
             </div>
 
-            {/* Botão Ver Mais - sempre aparece se existir pelo menos um catálogo */}
-            {catalogs.filter(catalog => catalog.active).length > 0 && (
+            {/* Botão Ver Mais - só aparece se houver mais de 3 catálogos */}
+            {catalogs.length > 3 && (
               <div className="text-center mt-12">
                 <Link
                   to="/catalogs"
                   className="bg-gold-600 hover:bg-gold-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 inline-flex items-center shadow-lg font-poppins"
                 >
                   <i className="fas fa-eye mr-3"></i>
-                  Ver Todos os Catálogos
+                  Ver Mais Catálogos
                 </Link>
               </div>
             )}

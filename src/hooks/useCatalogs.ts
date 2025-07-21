@@ -21,10 +21,6 @@ export interface Catalog {
   hero_image: string;
   hero_cta_text: string | null;
   active: boolean;
-  featured: boolean;
-  display_order: number;
-  created_at?: string;
-  updated_at?: string;
   products?: CatalogProduct[];
 }
 
@@ -40,19 +36,10 @@ export const useCatalogs = () => {
           *,
           products:catalog_products(*)
         `)
-        .order('display_order');
+        .order('created_at');
 
       if (error) throw error;
-      
-      // Transform the data to ensure all required fields are present
-      const transformedData: Catalog[] = (data || []).map(catalog => ({
-        ...catalog,
-        featured: (catalog as any).featured ?? false,
-        display_order: (catalog as any).display_order ?? 0,
-        products: catalog.products || []
-      }));
-      
-      setCatalogs(transformedData);
+      setCatalogs(data || []);
     } catch (error) {
       console.error('Error fetching catalogs:', error);
       toast({
@@ -185,56 +172,6 @@ export const useCatalogs = () => {
     }
   };
 
-  const updateCatalogOrder = async (catalogId: string, newOrder: number) => {
-    try {
-      const { error } = await supabase
-        .from('catalogs')
-        .update({ display_order: newOrder } as any)
-        .eq('id', catalogId);
-
-      if (error) throw error;
-      
-      await fetchCatalogs();
-      toast({
-        title: "Ordem atualizada!",
-        description: "A ordem dos catálogos foi alterada com sucesso.",
-      });
-    } catch (error) {
-      console.error('Error updating catalog order:', error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível atualizar a ordem.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-
-  const toggleCatalogFeatured = async (catalogId: string, featured: boolean) => {
-    try {
-      const { error } = await supabase
-        .from('catalogs')
-        .update({ featured } as any)
-        .eq('id', catalogId);
-
-      if (error) throw error;
-      
-      await fetchCatalogs();
-      toast({
-        title: featured ? "Catálogo destacado!" : "Catálogo removido do destaque!",
-        description: featured ? "O catálogo agora aparecerá na página inicial." : "O catálogo foi removido da página inicial.",
-      });
-    } catch (error) {
-      console.error('Error toggling catalog featured:', error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível alterar o destaque do catálogo.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-
   const deleteCatalog = async (id: string) => {
     try {
       const { error } = await supabase
@@ -269,8 +206,6 @@ export const useCatalogs = () => {
     loading,
     addCatalog,
     updateCatalog,
-    updateCatalogOrder,
-    toggleCatalogFeatured,
     deleteCatalog,
     refetch: fetchCatalogs
   };

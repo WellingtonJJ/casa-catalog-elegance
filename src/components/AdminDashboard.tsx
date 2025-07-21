@@ -42,8 +42,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     hero_image: '',
     hero_cta_text: '',
     active: true,
-    featured: false,
-    display_order: 0,
     products: []
   });
 
@@ -143,8 +141,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         hero_image: '',
         hero_cta_text: '',
         active: true,
-        featured: false,
-        display_order: 0,
         products: []
       });
       setShowNewCatalogForm(false);
