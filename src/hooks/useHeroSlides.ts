@@ -93,6 +93,31 @@ export const useHeroSlides = () => {
     }
   };
 
+  const updateSlideOrder = async (slideId: string, newOrder: number) => {
+    try {
+      const { error } = await supabase
+        .from('hero_slides')
+        .update({ display_order: newOrder })
+        .eq('id', slideId);
+
+      if (error) throw error;
+      
+      await fetchSlides();
+      toast({
+        title: "Ordem atualizada!",
+        description: "A ordem dos slides foi alterada com sucesso.",
+      });
+    } catch (error) {
+      console.error('Error updating slide order:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível atualizar a ordem.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
   const deleteSlide = async (id: string) => {
     try {
       const { error } = await supabase
@@ -127,6 +152,7 @@ export const useHeroSlides = () => {
     loading,
     addSlide,
     updateSlide,
+    updateSlideOrder,
     deleteSlide,
     refetch: fetchSlides
   };
