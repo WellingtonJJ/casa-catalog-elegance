@@ -43,7 +43,16 @@ export const useCatalogs = () => {
         .order('display_order');
 
       if (error) throw error;
-      setCatalogs(data || []);
+      
+      // Transform the data to ensure all required fields are present
+      const transformedData: Catalog[] = (data || []).map(catalog => ({
+        ...catalog,
+        featured: catalog.featured ?? false,
+        display_order: catalog.display_order ?? 0,
+        products: catalog.products || []
+      }));
+      
+      setCatalogs(transformedData);
     } catch (error) {
       console.error('Error fetching catalogs:', error);
       toast({
@@ -180,7 +189,7 @@ export const useCatalogs = () => {
     try {
       const { error } = await supabase
         .from('catalogs')
-        .update({ display_order: newOrder })
+        .update({ display_order: newOrder } as any)
         .eq('id', catalogId);
 
       if (error) throw error;
@@ -205,7 +214,7 @@ export const useCatalogs = () => {
     try {
       const { error } = await supabase
         .from('catalogs')
-        .update({ featured })
+        .update({ featured } as any)
         .eq('id', catalogId);
 
       if (error) throw error;
