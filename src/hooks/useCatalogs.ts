@@ -47,8 +47,8 @@ export const useCatalogs = () => {
       // Transform the data to ensure all required fields are present
       const transformedData: Catalog[] = (data || []).map(catalog => ({
         ...catalog,
-        featured: catalog.featured ?? false,
-        display_order: catalog.display_order ?? 0,
+        featured: (catalog as any).featured ?? false,
+        display_order: (catalog as any).display_order ?? 0,
         products: catalog.products || []
       }));
       
