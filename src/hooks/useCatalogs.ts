@@ -23,6 +23,8 @@ export interface Catalog {
   active: boolean;
   featured: boolean;
   display_order: number;
+  created_at?: string;
+  updated_at?: string;
   products?: CatalogProduct[];
 }
 
