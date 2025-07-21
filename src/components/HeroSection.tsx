@@ -1,103 +1,128 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { useSwipeable } from 'react-swipeable';
 import { useHeroSlides } from '@/hooks/useHeroSlides';
-import { HeroSlideSkeleton } from '@/components/ui/skeleton-catalog';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
 
 const HeroSection = () => {
-  const { slides, loading } = useHeroSlides();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { slides, loading } = useHeroSlides();
 
+  // Auto-advance slides
   useEffect(() => {
-    if (slides.length > 1) {
-      const interval = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-      }, 5000);
-      return () => clearInterval(interval);
-    }
+    if (slides.length === 0) return;
+
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
+
+    return () => clearInterval(timer);
   }, [slides.length]);
 
-  if (loading) {
-    return <HeroSlideSkeleton />;
-  }
+  // Navegação manual
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
 
-  if (!slides.length) {
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  // Swipe handler
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: handleNext,
+    onSwipedRight: handlePrev,
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
+
+  if (loading) {
     return (
-      <section className="relative h-96 md:h-[500px] lg:h-[600px] bg-gradient-to-r from-gold-600 to-gold-800 flex items-center justify-center">
-        <div className="text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">Bem-vindos</h1>
-          <p className="text-xl md:text-2xl">Configure seus slides no painel administrativo</p>
+      <section className="relative h-[70vh] md:h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gold-400 mx-auto"></div>
+          <p className="text-white mt-4 font-poppins">Carregando...</p>
         </div>
       </section>
     );
   }
 
-  const slide = slides[currentSlide];
+  if (slides.length === 0) {
+    return (
+      <section className="relative h-[70vh] md:h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-center text-white">
+          <h1 className="font-playfair text-4xl mb-4">Casa Premium</h1>
+          <p className="font-poppins">Nenhum slide encontrado</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="relative h-96 md:h-[500px] lg:h-[600px] overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
-        style={{ backgroundImage: `url(${slide.background_image})` }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-40" />
-      </div>
-      
-      <div className="relative z-10 h-full flex items-center justify-center px-4">
-        <div className="text-center text-white max-w-4xl">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 font-serif animate-fade-in">
-            {slide.title}
-          </h1>
-          {slide.subtitle && (
-            <h2 className="text-xl md:text-2xl lg:text-3xl mb-6 font-light animate-fade-in animation-delay-200">
-              {slide.subtitle}
-            </h2>
-          )}
-          {slide.description && (
-            <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto animate-fade-in animation-delay-400">
-              {slide.description}
-            </p>
-          )}
-          {slide.cta_text && (
-            <button className="bg-gold-600 hover:bg-gold-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors hover-scale animate-fade-in animation-delay-600">
-              {slide.cta_text}
-            </button>
-          )}
-        </div>
-      </div>
+    <Carousel className="relative" {...swipeHandlers}>
+      <CarouselContent>
+        {slides.map((slide, index) => (
+          <CarouselItem
+            key={slide.id}
+            style={{ display: index === currentSlide ? 'block' : 'none' }}
+          >
+            <section
+              className="relative h-[70vh] md:h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${slide.background_image})`
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
 
+              <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-0">
+                <h1 className="font-playfair text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6 animate-fade-in">
+                  {slide.title}
+                  {slide.subtitle && (
+                    <span className="block text-gold-400 text-2xl md:text-3xl lg:text-4xl mt-2">
+                      {slide.subtitle}
+                    </span>
+                  )}
+                </h1>
+
+                {slide.description && (
+                  <p className="text-lg md:text-xl lg:text-2xl text-cream-100 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed animate-slide-up font-poppins">
+                    {slide.description}
+                  </p>
+                )}
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
+                  <button
+                    onClick={() => document.getElementById('catalogs')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-6 py-3 md:px-8 md:py-4 rounded-lg text-base md:text-lg font-semibold transition-all duration-400 font-poppins"
+                  >
+                    Ver Catálogos
+                  </button>
+                </div>
+              </div>
+            </section>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+
+      {/* Indicadores de slide */}
       {slides.length > 1 && (
-        <>
-          <button
-            onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors z-20"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors z-20"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-          
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  index === currentSlide 
-                    ? 'bg-white scale-110' 
-                    : 'bg-white/50 hover:bg-white/70'
-                }`}
-              />
-            ))}
-          </div>
-        </>
+        <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-400 ${
+                index === currentSlide ? 'bg-gold-400 scale-125' : 'bg-white/50 hover:bg-white/75'
+              }`}
+              aria-label={`Ir para o slide ${index + 1}`}
+            />
+          ))}
+        </div>
       )}
-    </section>
+    </Carousel>
   );
 };
 
