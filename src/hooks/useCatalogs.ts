@@ -47,8 +47,8 @@ export const useCatalogs = () => {
       // Transform the data to ensure all required fields are present
       const transformedData: Catalog[] = (data || []).map(catalog => ({
         ...catalog,
-        featured: (catalog as any).featured ?? false,
-        display_order: (catalog as any).display_order ?? 0,
+        featured: catalog.featured ?? false,
+        display_order: catalog.display_order ?? 0,
         products: catalog.products || []
       }));
       
@@ -189,7 +189,7 @@ export const useCatalogs = () => {
     try {
       const { error } = await supabase
         .from('catalogs')
-        .update({ display_order: newOrder } as any)
+        .update({ display_order: newOrder })
         .eq('id', catalogId);
 
       if (error) throw error;
@@ -214,7 +214,7 @@ export const useCatalogs = () => {
     try {
       const { error } = await supabase
         .from('catalogs')
-        .update({ featured } as any)
+        .update({ featured })
         .eq('id', catalogId);
 
       if (error) throw error;
