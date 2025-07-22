@@ -28,7 +28,7 @@ const About = () => {
             </h2>
             <div className="space-y-6 text-lg text-gray-700 font-poppins leading-relaxed">
               <p>
-                A <strong>EmpoRio</strong> nasceu da união de <strong>três irmãos com sólida experiência no comércio</strong>,
+                A <strong>ImpoRio</strong> nasceu da união de <strong>três irmãos com sólida experiência no comércio</strong>,
                 que transformaram um momento de crise em uma nova oportunidade. Fundada no período pós-pandemia, a empresa surgiu com o propósito de <strong>levar praticidade, qualidade e custo-benefício</strong> aos lares brasileiros.
               </p>
               <p>
