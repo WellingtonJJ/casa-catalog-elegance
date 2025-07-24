@@ -49,7 +49,7 @@ const CatalogSection = () => {
 
   // Mostrar apenas catálogos na home
   // const displayedCatalogs = catalogs.slice(1, 4);
-const displayedCatalogs = [catalogs[3], catalogs[1], catalogs[2]];
+  const displayedCatalogs = [catalogs[3], catalogs[1], catalogs[2]];
 
   return (
     <section id="catalogs" className="py-20 bg-gradient-to-b from-cream-50 to-white">
