@@ -85,7 +85,7 @@ const HeroSection = () => {
                     </span>
                   )}
                   {slide.subtitle && (
-                    <span className="block text-gold-400 mt-2">
+                    <span className="block text-red-400 mt-2">
                       {slide.subtitle}
                     </span>
                   )}
