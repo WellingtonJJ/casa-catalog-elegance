@@ -44,7 +44,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     active: true,
     products: []
   });
-
+  
   const handleLogout = () => {
     toast({
       title: "Logout realizado",
@@ -842,11 +842,18 @@ const NewCatalogForm: React.FC<{
   const addProduct = () => {
     setNewCatalog({
       ...newCatalog,
-      products: [...(newCatalog.products || []), { name: '', image: '', description: '', display_order: 0 }]
+      products: [...(newCatalog.products || []), { 
+        name: '', 
+        image: '', 
+        description: '', 
+        display_order: 0,
+        quantity: 0,
+        sku: ''
+      }]
     });
   };
 
-  const updateProduct = (index: number, field: string, value: string) => {
+  const updateProduct = (index: number, field: string, value: string | number) => {
     const updatedProducts = (newCatalog.products || []).map((product: any, i: number) => 
       i === index ? { ...product, [field]: value } : product
     );
@@ -980,6 +987,29 @@ const NewCatalogForm: React.FC<{
                     />
                   </div>
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 font-poppins">SKU</label>
+                    <input
+                      type="text"
+                      placeholder="SKU do produto"
+                      value={product.sku || ''}
+                      onChange={(e) => updateProduct(index, 'sku', e.target.value.toUpperCase())}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 font-poppins">Quantidade</label>
+                    <input
+                      type="number"
+                      placeholder="0"
+                      min="0"
+                      value={product.quantity || 0}
+                      onChange={(e) => updateProduct(index, 'quantity', parseInt(e.target.value) || 0)}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                    />
+                  </div>
+                </div>
                 <div className="flex items-end gap-3">
                   <div className="flex-1">
                     <ImageUpload
@@ -1056,12 +1086,14 @@ const CatalogCard: React.FC<{
         name: '', 
         image: '', 
         description: '', 
-        display_order: 0 
+        display_order: 0,
+        quantity: 0,
+        sku: ''
       }]
     });
   };
 
-  const updateProduct = (index: number, field: keyof CatalogProduct, value: string) => {
+  const updateProduct = (index: number, field: keyof CatalogProduct, value: string | number) => {
     const updatedProducts = (editData.products || []).map((product, i) => 
       i === index ? { ...product, [field]: value } : product
     );
@@ -1214,6 +1246,29 @@ const CatalogCard: React.FC<{
                         placeholder="Descrição"
                         value={product.description || ''}
                         onChange={(e) => updateProduct(index, 'description', e.target.value)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1 font-poppins">SKU</label>
+                      <input
+                        type="text"
+                        placeholder="SKU do produto"
+                        value={product.sku || ''}
+                        onChange={(e) => updateProduct(index, 'sku', e.target.value.toUpperCase())}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1 font-poppins">Quantidade</label>
+                      <input
+                        type="number"
+                        placeholder="0"
+                        min="0"
+                        value={product.quantity || 0}
+                        onChange={(e) => updateProduct(index, 'quantity', parseInt(e.target.value) || 0)}
                         className="w-full px-2 py-1 border border-gray-300 rounded text-sm font-poppins"
                       />
                     </div>
