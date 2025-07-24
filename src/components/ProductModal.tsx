@@ -120,26 +120,10 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
                 
                 {/* Informações do Produto */}
                 <div className="flex flex-wrap gap-4 mb-4">
-                  {product.sku && (
-                    <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full">
-                      <Hash size={16} className="text-gray-600" />
-                      <span className="text-sm font-medium text-gray-700 font-poppins">
-                        SKU: {product.sku}
-                      </span>
-                    </div>
-                  )}
-                  
-                  <div className="flex items-center gap-2 bg-blue-50 px-3 py-1 rounded-full">
-                    <Package size={16} className="text-blue-600" />
-                    <span className="text-sm font-medium text-blue-700 font-poppins">
-                      Qtd: {product.quantity}
-                    </span>
-                  </div>
-                  
                   {product.quantity === 0 && (
                     <div className="flex items-center gap-2 bg-red-50 px-3 py-1 rounded-full">
                       <span className="text-sm font-medium text-red-700 font-poppins">
-                        Esgotado
+                        {/* Esgotado */}
                       </span>
                     </div>
                   )}
@@ -161,6 +145,16 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
                     <p className="font-poppins text-gray-600 text-base leading-relaxed">
                       {product.description}
                     </p>
+                    {product.sku && (
+                      <div className="mt-4">
+                        <span className="block text-sm font-semibold text-gray-700 font-poppins">SKU: {product.sku}</span>
+                      </div>
+                    )}
+                    {typeof product.quantity === 'number' && product.quantity > 0 && (
+                      <div className="mt-1">
+                        <span className="block text-sm font-semibold text-blue-700 font-poppins">CAIXA: {product.quantity} Peças</span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
