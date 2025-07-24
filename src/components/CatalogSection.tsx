@@ -21,13 +21,13 @@ const CatalogSection = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[4, 2, 3].map((i) => (
+            {[1, 2, 3].map((i) => (
               <div key={i} className="bg-white rounded-2xl shadow-xl overflow-hidden animate-pulse">
                 <div className="h-64 bg-gray-300"></div>
                 <div className="p-6">
                   <div className="h-4 bg-gray-300 rounded mb-4"></div>
                   <div className="grid grid-cols-3 gap-3 mb-6">
-                    {[4, 2, 3].map((j) => (
+                    {[1, 2, 3].map((j) => (
                       <div key={j} className="text-center">
                         <div className="h-20 bg-gray-300 rounded-lg mb-2"></div>
                         <div className="h-3 bg-gray-300 rounded"></div>
