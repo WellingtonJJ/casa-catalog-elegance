@@ -48,7 +48,7 @@ const CatalogSection = () => {
   }
 
   // Mostrar apenas os primeiros 3 catálogos na home
-  const displayedCatalogs = catalogs.slice(0, 3);
+  const displayedCatalogs = catalogs.slice(1, 4);
 
   return (
     <section id="catalogs" className="py-20 bg-gradient-to-b from-cream-50 to-white">
