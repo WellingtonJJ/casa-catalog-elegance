@@ -80,7 +80,7 @@ const HeroSection = () => {
               <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-0">
                 <h1 className="font-playfair text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6 animate-fade-in">
                   {slide.title && (
-                    <span className="text-1xl md:text-3xl lg:text-4xl mt-2">
+                    <span className="text-1xl md:text-2xl lg:text-2xl mt-2">
                       {slide.subtitle}
                     </span>
                   )}
