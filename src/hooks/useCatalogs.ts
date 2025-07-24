@@ -10,6 +10,8 @@ export interface CatalogProduct {
   image: string;
   description: string | null;
   display_order: number;
+  quantity: number;
+  sku: string | null;
 }
 
 export interface Catalog {
@@ -80,7 +82,9 @@ export const useCatalogs = () => {
           name: product.name,
           image: product.image,
           description: product.description,
-          display_order: index + 1
+          display_order: index + 1,
+          quantity: product.quantity || 0,
+          sku: product.sku || null
         }));
 
         console.log('Products to insert:', productsToInsert);
@@ -146,7 +150,9 @@ export const useCatalogs = () => {
             name: product.name,
             image: product.image,
             description: product.description,
-            display_order: index + 1
+            display_order: index + 1,
+            quantity: product.quantity || 0,
+            sku: product.sku || null
           }));
 
           await supabase

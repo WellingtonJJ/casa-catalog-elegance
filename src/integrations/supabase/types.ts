@@ -23,6 +23,8 @@ export type Database = {
           id: string
           image: string
           name: string
+          quantity: number
+          sku: string | null
         }
         Insert: {
           catalog_id: string
@@ -32,6 +34,8 @@ export type Database = {
           id?: string
           image: string
           name: string
+          quantity?: number
+          sku?: string | null
         }
         Update: {
           catalog_id?: string
@@ -41,6 +45,8 @@ export type Database = {
           id?: string
           image?: string
           name?: string
+          quantity?: number
+          sku?: string | null
         }
         Relationships: [
           {

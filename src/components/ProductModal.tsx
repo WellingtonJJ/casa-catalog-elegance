@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { X, ZoomIn, Loader2 } from 'lucide-react';
+import { X, ZoomIn, Loader2, Package, Hash } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -8,7 +9,9 @@ interface Product {
   description: string | null;
   image: string;
   display_order: number;
-  price?: number; // Novo campo opcional
+  quantity: number;
+  sku: string | null;
+  price?: number;
 }
 
 interface ProductModalProps {
@@ -55,10 +58,18 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
     if (!product) return;
     
     const phone = "5521964603524";
-    const message = encodeURIComponent(
-      `Olá! Gostaria de mais informações sobre:\n*${product.name}*${product.price ? `\nValor: R$ ${product.price.toFixed(2)}` : ''}`
-    );
-    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+    let message = `Olá! Gostaria de mais informações sobre:\n*${product.name}*`;
+    
+    if (product.sku) {
+      message += `\nSKU: ${product.sku}`;
+    }
+    
+    if (product.price) {
+      message += `\nValor: R$ ${product.price.toFixed(2)}`;
+    }
+    
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
   }, [product]);
 
   if (!product) return null;
@@ -67,10 +78,7 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
     <>
       {/* Modal Principal */}
       <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent 
-  className="max-w-4xl p-0 overflow-hidden rounded-3xl shadow-2xl border-0 bg-white"
->
-
+        <DialogContent className="max-w-4xl p-0 overflow-hidden rounded-3xl shadow-2xl border-0 bg-white">
           <DialogHeader className="sr-only">
             <DialogTitle>Detalhes do Produto</DialogTitle>
           </DialogHeader>
@@ -100,13 +108,6 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
                   onLoad={() => setImageLoaded(true)}
                   loading="lazy"
                 />
-                {/* <div 
-                  className="absolute bottom-4 right-4 bg-white/80 p-2 rounded-full shadow-lg cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => setIsLightboxOpen(true)}
-                  aria-label="Ampliar imagem"
-                >
-                  <ZoomIn size={22} className="text-gray-700" />
-                </div> */}
               </div>
             </div>
 
@@ -116,6 +117,33 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
                 <h2 className="font-playfair text-3xl md:text-4xl font-bold text-gray-800 mb-3">
                   {product.name}
                 </h2>
+                
+                {/* Informações do Produto */}
+                <div className="flex flex-wrap gap-4 mb-4">
+                  {product.sku && (
+                    <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full">
+                      <Hash size={16} className="text-gray-600" />
+                      <span className="text-sm font-medium text-gray-700 font-poppins">
+                        SKU: {product.sku}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center gap-2 bg-blue-50 px-3 py-1 rounded-full">
+                    <Package size={16} className="text-blue-600" />
+                    <span className="text-sm font-medium text-blue-700 font-poppins">
+                      Qtd: {product.quantity}
+                    </span>
+                  </div>
+                  
+                  {product.quantity === 0 && (
+                    <div className="flex items-center gap-2 bg-red-50 px-3 py-1 rounded-full">
+                      <span className="text-sm font-medium text-red-700 font-poppins">
+                        Esgotado
+                      </span>
+                    </div>
+                  )}
+                </div>
                 
                 {product.price && (
                   <div className="flex items-center mb-4">
@@ -152,9 +180,6 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Lightbox */}
-  
     </>
   );
 };
