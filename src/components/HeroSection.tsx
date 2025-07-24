@@ -81,7 +81,7 @@ const HeroSection = () => {
                 <h1 className="font-playfair text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6 animate-fade-in">
                   {slide.title}
                   {slide.subtitle && (
-                    <span className="block text-gold-400 text-5xl md:text-3xl lg:text-6xl mt-2">
+                    <span className="">
                       {slide.subtitle}
                     </span>
                   )}
