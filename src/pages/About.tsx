@@ -19,26 +19,28 @@ const About = () => {
         </div>
       </section>
 
-      {/* Nossa História */}
+      {/* Sobre a Empresa */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="font-playfair text-4xl font-bold text-gray-800 mb-8">
-              Nossa História
+              Quem Somos
             </h2>
             <div className="space-y-6 text-lg text-gray-700 font-poppins leading-relaxed">
               <p>
-                A <strong>ImpoRio</strong> nasceu da união de <strong>três irmãos com sólida experiência no comércio</strong>,
-                que transformaram um momento de crise em uma nova oportunidade. Fundada no período pós-pandemia, a empresa surgiu com o propósito de <strong>levar praticidade, qualidade e custo-benefício</strong> aos lares brasileiros.
+                A <strong>ImpoRio</strong> é uma empresa sediada no Rio de Janeiro, especializada em utilidades domésticas, organização, camping, decoração, itens pet e produtos que facilitam o dia a dia. Nosso foco é oferecer soluções acessíveis, funcionais e com excelente giro para lojistas de todo o Brasil.
               </p>
               <p>
-                Começamos com uma <strong>linha de utensílios de cozinha</strong> e, com o tempo, expandimos nosso portfólio para atender diversas necessidades do lar — sempre com o compromisso de oferecer <strong>produtos seguros e de alta qualidade</strong>.
+                Com um portfólio diversificado e sempre atualizado, trabalhamos com produtos importados diretamente da China, cuidadosamente selecionados para atender às demandas reais do varejo brasileiro, unindo qualidade, preço competitivo e design inteligente.
               </p>
               <p>
-                Somos um <strong>negócio familiar com visão nacional</strong>, que valoriza relações próximas com seus clientes. Acreditamos no poder da confiança, no atendimento humano e em produtos que realmente fazem diferença no dia a dia.
+                Oferecemos uma curadoria estratégica de itens com alta procura no ponto de venda, priorizando funcionalidade, estética e ótimo custo-benefício. Nosso mix abrange desde produtos sazonais e lançamentos até linhas essenciais, incluindo utilidades para cozinha, organização, lazer, cuidados com pets, entre outros, sempre com foco em performance de venda e reposição rápida nas prateleiras.
               </p>
               <p>
-                <strong>Conheça nosso catálogo</strong> e transforme sua casa com a EmpoRio.
+                Nosso diferencial está na agilidade operacional, no relacionamento próximo com os lojistas e na capacidade de antecipar tendências do mercado. Atuamos com foco em inovação, praticidade e eficiência, garantindo aos nossos parceiros acesso rápido aos produtos que mais vendem.
+              </p>
+              <p>
+                A <strong>ImpoRio</strong> acredita que construir uma marca sólida passa por um modelo de gestão responsável, que valoriza pessoas e coloca a satisfação do cliente como prioridade. Mais do que fornecer produtos, queremos impulsionar negócios com soluções práticas, oportunidades reais de venda e parcerias duradouras.
               </p>
             </div>
           </div>
