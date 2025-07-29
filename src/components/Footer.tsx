@@ -66,7 +66,7 @@ const Footer = () => {
             <div className="space-y-3 font-poppins">
               <div className="flex items-center text-gray-300">
                 <i className="fas fa-phone mr-3 text-gold-400"></i>
-                <span>(21) 96460-3524</span>
+                <span>(21) 99609-8810</span>
               </div>
               <div className="flex items-center text-gray-300">
                 <i className="fas fa-envelope mr-3 text-gold-400"></i>

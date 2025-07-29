@@ -113,7 +113,7 @@ const Contact = () => {
 
   const handleWhatsAppDirect = () => {
     const phone = "5521996098810";
-    const message = encodeURIComponent("Olá! Gostaria de mais informações sobre os produtos da EmpoRio.");
+    const message = encodeURIComponent("Olá! Gostaria de mais informações sobre os produtos da ImpoRio.");
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
 
