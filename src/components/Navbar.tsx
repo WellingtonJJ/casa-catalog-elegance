@@ -15,7 +15,7 @@ const Navbar = () => {
             <div className="flex-shrink-0">
               <Link to="/" className="hover:opacity-80 transition-opacity">
                 <img 
-                  src="/lovable-uploads/be3f153d-caa8-409b-bac1-0ff2db598c56.png" 
+                  src="./public/logoimporio.png" 
                   alt="ImpoRio" 
                   className="h-10 w-auto"
                 />

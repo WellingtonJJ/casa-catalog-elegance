@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="mb-4">
               <img 
-                src="/lovable-uploads/be3f153d-caa8-409b-bac1-0ff2db598c56.png" 
+                src="./public/logoimporio.png" 
                 alt="ImpoRio" 
                 className="h-12 w-auto"
               />
