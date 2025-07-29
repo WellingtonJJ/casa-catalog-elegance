@@ -108,7 +108,7 @@ ${formData.message}`;
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800 font-poppins">Telefone</h3>
-                    <p className="text-gray-600 font-poppins">(21) 96460-3524</p>
+                    <p className="text-gray-600 font-poppins">(21) 99609-8810</p>
                   </div>
                 </div>
 
@@ -118,7 +118,7 @@ ${formData.message}`;
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800 font-poppins">Email</h3>
-                    <p className="text-gray-600 font-poppins">contato@emporio.com</p>
+                    <p className="text-gray-600 font-poppins">comercial@imporio.com.br</p>
                   </div>
                 </div>
 
@@ -129,8 +129,7 @@ ${formData.message}`;
                   <div>
                     <h3 className="font-semibold text-gray-800 font-poppins">Horário de Atendimento</h3>
                     <p className="text-gray-600 font-poppins">
-                      Segunda a Sexta: 9h às 18h<br />
-                      Sábado: 9h às 14h
+                      Segunda a Sexta: 8h às 17h<br />
                     </p>
                   </div>
                 </div>
