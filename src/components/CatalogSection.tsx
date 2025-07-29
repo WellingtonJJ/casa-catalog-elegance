@@ -104,7 +104,7 @@ const CatalogSection = () => {
           </p>
           <button
             onClick={() => {
-              const phone = "5521964603524";
+              const phone = "5521996098810";
               const message = encodeURIComponent("Olá! Gostaria de mais informações sobre os catálogos.");
               window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
             }}

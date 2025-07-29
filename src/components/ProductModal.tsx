@@ -56,7 +56,7 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
   const handleWhatsApp = useCallback(() => {
     if (!product) return;
     
-    const phone = "5521964603524";
+    const phone = "5521996098810";
     let message = `Olá! Gostaria de mais informações sobre:\n*${product.name}*`;
     
     if (product.sku) {

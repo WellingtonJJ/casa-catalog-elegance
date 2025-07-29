@@ -13,7 +13,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const phone = "5521964603524";
+    const phone = "5521996098810";
     const message = encodeURIComponent(`Olá! Gostaria de solicitar o catálogo "${catalog.name}".`);
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
