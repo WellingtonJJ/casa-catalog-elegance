@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { toast } from '@/hooks/use-toast';
@@ -13,6 +14,8 @@ const Contact = () => {
     message: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -20,39 +23,61 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    // Criar mensagem para WhatsApp
-    const whatsappMessage = `Olá! Vim através do site da EmpoRio.
+    try {
+      // Configurações do EmailJS - você precisará configurar estas variáveis
+      const serviceId = 'YOUR_SERVICE_ID'; // Substitua pelo seu Service ID
+      const templateId = 'YOUR_TEMPLATE_ID'; // Substitua pelo seu Template ID  
+      const publicKey = 'YOUR_PUBLIC_KEY'; // Substitua pela sua Public Key
+      
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        to_name: 'EmpoRio', // Nome da empresa
+      };
 
-*Nome:* ${formData.name}
-*Email:* ${formData.email}
-*Telefone:* ${formData.phone}
-*Assunto:* ${formData.subject}
+      console.log('Enviando email com parâmetros:', templateParams);
+      
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      );
 
-*Mensagem:*
-${formData.message}`;
+      console.log('Email enviado com sucesso:', response);
+      
+      toast({
+        title: "Mensagem enviada com sucesso!",
+        description: "Obrigado pelo contato. Responderemos em breve!",
+      });
 
-    const phone = "5521964603524";
-    const encodedMessage = encodeURIComponent(whatsappMessage);
-    
-    // Abrir WhatsApp
-    window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
-    
-    toast({
-      title: "Redirecionando para WhatsApp",
-      description: "Você será redirecionado para o WhatsApp para enviar sua mensagem.",
-    });
-
-    // Limpar formulário
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
-    });
+      // Limpar formulário após envio bem-sucedido
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+      
+    } catch (error) {
+      console.error('Erro ao enviar email:', error);
+      
+      toast({
+        title: "Erro ao enviar mensagem",
+        description: "Ocorreu um erro. Tente novamente ou entre em contato via WhatsApp.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleWhatsAppDirect = () => {
@@ -164,7 +189,8 @@ ${formData.message}`;
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins disabled:bg-gray-100 disabled:cursor-not-allowed"
                       placeholder="Seu nome completo"
                     />
                   </div>
@@ -180,7 +206,8 @@ ${formData.message}`;
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins disabled:bg-gray-100 disabled:cursor-not-allowed"
                       placeholder="seu@email.com"
                     />
                   </div>
@@ -197,7 +224,8 @@ ${formData.message}`;
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins disabled:bg-gray-100 disabled:cursor-not-allowed"
                       placeholder="(00) 00000-0000"
                     />
                   </div>
@@ -211,7 +239,8 @@ ${formData.message}`;
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
                       <option value="">Selecione um assunto</option>
                       <option value="Informações sobre produtos">Informações sobre produtos</option>
@@ -234,18 +263,43 @@ ${formData.message}`;
                     onChange={handleChange}
                     required
                     rows={5}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
+                    disabled={isSubmitting}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins disabled:bg-gray-100 disabled:cursor-not-allowed"
                     placeholder="Digite sua mensagem aqui..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-gold-600 hover:bg-gold-700 text-white px-8 py-4 rounded-lg font-semibold font-poppins transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full bg-gold-600 hover:bg-gold-700 text-white px-8 py-4 rounded-lg font-semibold font-poppins transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                  Enviar Mensagem
+                  {isSubmitting ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin mr-2"></i>
+                      Enviando...
+                    </>
+                  ) : (
+                    'Enviar Mensagem'
+                  )}
                 </button>
               </form>
+
+              {/* Instruções de configuração */}
+              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <h4 className="text-sm font-semibold text-yellow-800 mb-2">
+                  ⚠️ Configuração Necessária
+                </h4>
+                <p className="text-sm text-yellow-700">
+                  Para que o formulário funcione, você precisa:
+                </p>
+                <ol className="text-sm text-yellow-700 mt-2 ml-4 list-decimal">
+                  <li>Criar uma conta gratuita no <a href="https://emailjs.com" target="_blank" rel="noopener noreferrer" className="underline">EmailJS</a></li>
+                  <li>Configurar um serviço de email (Gmail, Outlook, etc.)</li>
+                  <li>Criar um template de email</li>
+                  <li>Substituir as variáveis YOUR_SERVICE_ID, YOUR_TEMPLATE_ID e YOUR_PUBLIC_KEY no código</li>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
