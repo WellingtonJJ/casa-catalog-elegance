@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import emailjs from '@emailjs/browser';
 import Navbar from '../components/Navbar';
@@ -16,11 +15,43 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Função para formatar o telefone
+  const formatPhone = (value: string): string => {
+    // Remove todos os caracteres não numéricos
+    const cleaned = value.replace(/\D/g, '');
+    // Limita a 11 dígitos (tamanho máximo para celular brasileiro)
+    const limited = cleaned.substring(0, 11);
+    
+    // Aplica a formatação
+    let formatted = '';
+    if (limited.length > 0) {
+      formatted = '(' + limited.substring(0, 2);
+    }
+    if (limited.length > 2) {
+      formatted += ') ' + limited.substring(2, 7);
+    }
+    if (limited.length > 7) {
+      formatted += '-' + limited.substring(7, 11);
+    }
+    
+    return formatted;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    
+    // Aplica formatação apenas para o campo de telefone
+    if (name === 'phone') {
+      setFormData({
+        ...formData,
+        [name]: formatPhone(value)
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,18 +59,18 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      // Configurações do EmailJS - você precisará configurar estas variáveis
-      const serviceId = 'YOUR_SERVICE_ID'; // Substitua pelo seu Service ID
-      const templateId = 'YOUR_TEMPLATE_ID'; // Substitua pelo seu Template ID  
-      const publicKey = 'YOUR_PUBLIC_KEY'; // Substitua pela sua Public Key
+      // Configurações do EmailJS
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
       
       const templateParams = {
         from_name: formData.name,
         from_email: formData.email,
-        phone: formData.phone,
+        from_phone: formData.phone,
         subject: formData.subject,
         message: formData.message,
-        to_name: 'EmpoRio', // Nome da empresa
+        to_name: 'ImpoRio',
       };
 
       console.log('Enviando email com parâmetros:', templateParams);
@@ -58,7 +89,7 @@ const Contact = () => {
         description: "Obrigado pelo contato. Responderemos em breve!",
       });
 
-      // Limpar formulário após envio bem-sucedido
+      // Limpar formulário após envio
       setFormData({
         name: '',
         email: '',
@@ -285,21 +316,6 @@ const Contact = () => {
                 </button>
               </form>
 
-              {/* Instruções de configuração */}
-              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <h4 className="text-sm font-semibold text-yellow-800 mb-2">
-                  ⚠️ Configuração Necessária
-                </h4>
-                <p className="text-sm text-yellow-700">
-                  Para que o formulário funcione, você precisa:
-                </p>
-                <ol className="text-sm text-yellow-700 mt-2 ml-4 list-decimal">
-                  <li>Criar uma conta gratuita no <a href="https://emailjs.com" target="_blank" rel="noopener noreferrer" className="underline">EmailJS</a></li>
-                  <li>Configurar um serviço de email (Gmail, Outlook, etc.)</li>
-                  <li>Criar um template de email</li>
-                  <li>Substituir as variáveis YOUR_SERVICE_ID, YOUR_TEMPLATE_ID e YOUR_PUBLIC_KEY no código</li>
-                </ol>
-              </div>
             </div>
           </div>
         </div>
