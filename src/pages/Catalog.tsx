@@ -171,6 +171,7 @@ const Catalog = () => {
       </section>
 
       <ProductModal product={selectedProduct} isOpen={isModalOpen} onClose={handleCloseModal} />
+      
       <Footer />
     </div>
   );

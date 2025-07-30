@@ -98,22 +98,26 @@ const CatalogSection = () => {
           </>
         )}
 
-        <div className="text-center mt-16">
-          <p className="text-lg text-gray-600 mb-6 font-poppins">
-            Interessado em algum catálogo específico?
-          </p>
-          <button
-            onClick={() => {
-              const phone = "5521996098810";
-              const message = encodeURIComponent("Olá! Gostaria de mais informações sobre os catálogos.");
-              window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-            }}
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center mx-auto shadow-lg font-poppins"
-          >
-            <i className="fab fa-whatsapp mr-3"></i>
-            Conversar no WhatsApp
-          </button>
-        </div>
+<div className="bg-gradient-to-r from-gold-100 to-cream-100 rounded-2xl p-10 text-center shadow-md mt-16">
+  <h3 className="font-playfair text-2xl font-bold text-gray-800 mb-4 leading-tight">
+    Interessado em algum catálogo específico?
+  </h3>
+  <p className="font-poppins text-gray-700 mb-6 text-lg max-w-xl mx-auto leading-relaxed">
+    Entre em contato conosco pelo WhatsApp e solicite mais informações sobre os catálogos disponíveis.
+  </p>
+  <button
+    onClick={() => {
+      const phone = "5521996098810";
+      const message = encodeURIComponent("Olá! Gostaria de mais informações sobre os catálogos.");
+      window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+    }}
+    className="bg-green-600 hover:bg-green-700 text-white px-10 py-4 rounded-lg font-poppins font-semibold transition-all duration-300 transform hover:scale-105 flex items-center mx-auto text-lg shadow-md"
+  >
+    <i className="fab fa-whatsapp mr-3 text-xl"></i>
+    Conversar no WhatsApp
+  </button>
+</div>
+
       </div>
     </section>
   );
