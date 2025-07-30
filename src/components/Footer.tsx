@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="mb-4">
               <img
-                src="./logoimporio.png"
+                src="/logoimporio.png"
                 alt="ImpoRio"
                 className="h-12 w-auto"
               />
