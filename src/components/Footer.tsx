@@ -7,29 +7,44 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+
           {/* Logo e Descrição */}
           <div className="col-span-1 md:col-span-2">
             <div className="mb-4">
-              <img 
-                src="./public/logoimporio.png" 
-                alt="ImpoRio" 
+              <img
+                src="./public/logoimporio.png"
+                alt="ImpoRio"
                 className="h-12 w-auto"
               />
             </div>
             <p className="text-gray-300 mb-6 font-poppins leading-relaxed">
-              Transformamos casas em lares especiais através de utensílios cuidadosamente selecionados. 
-              Nossa missão é oferecer produtos de qualidade premium que elevam o padrão do seu lar.
+              Transformamos casas em lares especiais através de utensílios cuidadosamente selecionados.
+              Nossa missão é oferecer produtos de qualidade que elevam o padrão do seu lar.
             </p>
+
+            {/* Redes Sociais */}
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-gold-400 transition-colors">
+              <a
+                href="https://www.instagram.com/impo.riocomercioexterior/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-gold-400 transition-colors"
+              >
                 <i className="fab fa-instagram text-2xl"></i>
               </a>
-              <a href="#" className="text-gray-300 hover:text-gold-400 transition-colors">
+
+              {/* <a href="#" className="text-gray-300 hover:text-gold-400 transition-colors">
                 <i className="fab fa-facebook text-2xl"></i>
-              </a>
-              <a href="#" className="text-gray-300 hover:text-gold-400 transition-colors">
+              </a> */}
+              <a
+                href="https://wa.me/5521996098810"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-gold-400 transition-colors"
+              >
                 <i className="fab fa-whatsapp text-2xl"></i>
               </a>
+
             </div>
           </div>
 
@@ -43,17 +58,17 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/catalogs" className="text-gray-300 hover:text-gold-400 transition-colors">
+                <Link to="/catalogos" className="text-gray-300 hover:text-gold-400 transition-colors">
                   Catálogos
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-gold-400 transition-colors">
+                <Link to="/sobre" className="text-gray-300 hover:text-gold-400 transition-colors">
                   Sobre Nós
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-300 hover:text-gold-400 transition-colors">
+                <Link to="/contato" className="text-gray-300 hover:text-gold-400 transition-colors">
                   Contato
                 </Link>
               </li>

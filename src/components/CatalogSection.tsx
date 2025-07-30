@@ -86,12 +86,12 @@ const CatalogSection = () => {
             {/* Botão Ver Mais - só aparece se houver mais de 3 catálogos */}
             {catalogs.length > 3 && (
               <div className="text-center mt-12">
-                <Link
-                  to="/catalogs"
-                  className="bg-gold-600 hover:bg-gold-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 inline-flex items-center shadow-lg font-poppins"
+                <Link 
+                  to="/catalogos"
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white font-semibold rounded-xl hover:from-gold-600 hover:to-gold-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                 >
-                  <i className="fas fa-eye mr-3"></i>
-                  Ver Mais Catálogos
+                  Ver Todos os Catálogos
+                  <i className="fas fa-arrow-right ml-2"></i>
                 </Link>
               </div>
             )}

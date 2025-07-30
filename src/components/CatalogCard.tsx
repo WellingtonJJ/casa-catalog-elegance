@@ -21,7 +21,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
   return (
     <div className="group relative">
       <Link 
-        to={`/catalog/${catalog.id}`}
+        to={`/catalogo/${catalog.id}`}
         className="block relative bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer border border-gray-100"
       >
         {/* Badge de destaque */}
@@ -30,7 +30,7 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
           Destaque
         </div>
 
-        {/* Imagem Principal com overlay gradiente mais suave */}
+        {/* Imagem Principal */}
         <div className="relative h-56 overflow-hidden">
           <img
             src={catalog.image}
@@ -44,16 +44,17 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
             <h3 className="font-playfair text-3xl font-bold text-white mb-2 drop-shadow-2xl">
               {catalog.name}
             </h3>
-            <p className="text-gray-100 font-poppins text-sm leading-relaxed drop-shadow-lg">
+            {/* Texto ajustado para 3 linhas */}
+            <p className="text-gray-100 font-poppins text-sm leading-relaxed drop-shadow-lg line-clamp-3 min-h-[60px]">
               {catalog.description}
             </p>
           </div>
         </div>
 
-        {/* Container de conteúdo com glassmorphism sutil */}
+        {/* Container de conteúdo */}
         <div className="p-6 bg-gradient-to-br from-gray-50 to-white relative">
           {/* Produtos em Destaque */}
-          <div className="mb-6">
+          <div className="mb-6 min-h-[160px]">
             <div className="flex items-center justify-between mb-4">
               <h4 className="font-poppins text-lg font-bold text-gray-800 flex items-center gap-2">
                 <div className="w-1 h-5 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
@@ -78,14 +79,15 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover/product:bg-black/10 transition-colors duration-300"></div>
                     </div>
-                    <p className="text-xs text-gray-700 font-poppins font-medium leading-tight group-hover/product:text-gray-900 transition-colors duration-300">
+                    {/* Nome do produto ajustado para 2 linhas */}
+                    <p className="text-xs text-gray-700 font-poppins font-medium leading-tight group-hover/product:text-gray-900 transition-colors duration-300 line-clamp-2 h-[32px] overflow-hidden">
                       {product.name}
                     </p>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
+              <div className="text-center py-6">
                 <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full mx-auto mb-3 flex items-center justify-center">
                   <Star className="w-6 h-6 text-gray-400" />
                 </div>
@@ -94,54 +96,30 @@ const CatalogCard: React.FC<CatalogCardProps> = ({ catalog }) => {
             )}
           </div>
 
-          {/* Divisor sutil */}
+          {/* Divisor */}
           <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-5"></div>
 
-          {/* Botões lado a lado com design premium */}
+          {/* Botões */}
           <div className="flex gap-3">
-  {/* Botão Ver Catálogo */}
-  <Link
-    to={`/catalog/${catalog.id}`}
-    className="
-      flex-1 flex items-center justify-center gap-2
-      bg-white border border-gray-200 rounded-xl
-      text-gray-900 font-semibold font-poppins text-base
-      py-3 px-4 shadow-sm
-      transition-all duration-200
-      hover:bg-gray-50 hover:shadow-md
-      active:bg-gray-100 active:shadow-sm
-      focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
-      group
-    "
-    tabIndex={0}
-  >
-    <Eye className="w-4 h-4 text-blue-600" />
-    <span>Ver Catálogo</span>
-  </Link>
-
-  {/* Botão WhatsApp */}
-{/*   <button
-    type="button"
-    onClick={handleWhatsAppClick}
-    className="
-      flex-1 flex items-center justify-center gap-2
-      bg-green-600 border border-green-600 rounded-xl
-      text-white font-semibold font-poppins text-base
-      py-3 px-4 shadow-sm
-      transition-all duration-200
-      hover:bg-green-700 hover:shadow-md
-      active:bg-green-800 active:shadow-sm
-      focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400
-      group
-    "
-    tabIndex={0}
-    aria-label={`Solicitar catálogo de ${catalog.name} no WhatsApp`}
-  >
-    <FontAwesomeIcon icon={faWhatsapp} className="w-4 h-4 text-white" />
-    <span>Solicite por WhatsApp</span>
-  </button> */}
-</div>
-
+            <Link
+              to={`/catalogo/${catalog.id}`}
+              className="
+                flex-1 flex items-center justify-center gap-2
+                bg-white border border-gray-200 rounded-xl
+                text-gray-900 font-semibold font-poppins text-base
+                py-3 px-4 shadow-sm
+                transition-all duration-200
+                hover:bg-gray-50 hover:shadow-md
+                active:bg-gray-100 active:shadow-sm
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
+                group
+              "
+              tabIndex={0}
+            >
+              <Eye className="w-4 h-4 text-blue-600" />
+              <span>Ver Catálogo</span>
+            </Link>
+          </div>
         </div>
 
         {/* Efeito de brilho no hover */}

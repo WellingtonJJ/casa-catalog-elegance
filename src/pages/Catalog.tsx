@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductModal from '../components/ProductModal';
 import { useCatalogs } from '@/hooks/useCatalogs';
+import { SEO } from '../components/SEO';
 
 const Catalog = () => {
   const { id } = useParams();
@@ -63,6 +64,14 @@ const Catalog = () => {
 
   return (
     <div className="min-h-screen bg-cream-50">
+      <SEO
+        title={`${catalog.name} - ImpoRio |  Variedades de produtos na sua loja`}
+        description={catalog.description || `Catálogo de ${catalog.name} com produtos importados da China. Soliciento via WhatsApp.`}
+        keywords={`${catalog.name}, utensílios, catálogo, ImpoRio, importação, China, ${catalog.description || ''}`}
+        canonical={`https://imporio.com.br/catalogo/${catalog.id}`}
+        image={catalog.image}
+      />
+
       <Navbar />
 
       {/* Hero do Catálogo */}
@@ -70,7 +79,7 @@ const Catalog = () => {
         className="relative h-96 bg-cover bg-center"
         style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${catalog.hero_image})` }}
       >
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center pt-12">
           <div className="text-center text-white px-4">
             <h1 className="font-playfair text-5xl font-bold mb-4 tracking-tight leading-tight">
               {catalog.name}

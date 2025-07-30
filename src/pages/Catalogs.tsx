@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import CatalogCard from '@/components/CatalogCard';
 import { useCatalogs } from '@/hooks/useCatalogs';
 import { Loader2 } from 'lucide-react';
+import { SEO } from '../components/SEO';
 
 const Catalogs = () => {
   const { catalogs, loading } = useCatalogs();
@@ -11,16 +12,23 @@ const Catalogs = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEO
+        title="Catálogos - ImpoRio |  Variedades de produtos na sua loja"
+        description="Conheça a história, missão e valores da ImpoRio, empresa especializada em utilidades domésticas, organização e decoração."
+        keywords="ImpoRio, sobre nós, utilidades domésticas, importação, missão, valores, empresa"
+        canonical="https://imporio.com.br/sobre"
+        image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      />
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-gray-800 to-gray-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12">
           <h1 className="font-playfair text-5xl md:text-6xl font-bold mb-6 tracking-tight leading-tight">
             Nossos <span className="text-gold-400">Catálogos</span>
           </h1>
           <p className="font-poppins text-xl md:text-2xl text-cream-100 max-w-3xl mx-auto leading-relaxed">
-            Explore nossa coleção cuidadosamente selecionada de produtos premium para seu lar.
+            Explore nossa coleção cuidadosamente selecionada de produtos para seu lar.
           </p>
         </div>
       </section>

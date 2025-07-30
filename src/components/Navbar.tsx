@@ -15,9 +15,9 @@ const Navbar = () => {
             <div className="flex-shrink-0">
               <Link to="/" className="hover:opacity-80 transition-opacity">
                 <img 
-                  src="./public/logoimporio.png" 
+                  src="/logoimporio.png" 
                   alt="ImpoRio" 
-                  className="h-10 w-auto"
+                  className="h-12 w-auto"
                 />
               </Link>
             </div>
@@ -32,19 +32,19 @@ const Navbar = () => {
                   Início
                 </Link>
                 <Link
-                  to="/catalogs"
+                  to="/catalogos"
                   className="text-gray-800 hover:text-gold-600 px-3 py-2 text-sm font-medium transition-colors"
                 >
                   Catálogos
                 </Link>
                 <Link
-                  to="/about"
+                  to="/sobre"
                   className="text-gray-800 hover:text-gold-600 px-3 py-2 text-sm font-medium transition-colors"
                 >
                   Sobre
                 </Link>
                 <Link
-                  to="/contact"
+                  to="/contato"
                   className="text-gray-800 hover:text-gold-600 px-3 py-2 text-sm font-medium transition-colors"
                 >
                   Contato
@@ -77,7 +77,7 @@ const Navbar = () => {
             <span className="text-xs font-medium">Início</span>
           </Link>
           <Link
-            to="/catalogs"
+            to="/catalogos"
             className="flex flex-col items-center py-2 px-3 text-gray-600 hover:text-gold-600 transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -85,7 +85,7 @@ const Navbar = () => {
             <span className="text-xs font-medium">Catálogos</span>
           </Link>
           <Link
-            to="/about"
+            to="/sobre"
             className="flex flex-col items-center py-2 px-3 text-gray-600 hover:text-gold-600 transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -93,7 +93,7 @@ const Navbar = () => {
             <span className="text-xs font-medium">Sobre</span>
           </Link>
           <Link
-            to="/contact"
+            to="/contato"
             className="flex flex-col items-center py-2 px-3 text-gray-600 hover:text-gold-600 transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >

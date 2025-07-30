@@ -1,15 +1,24 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { SEO } from '@/components/SEO';
 
 const About = () => {
   return (
     <div className="min-h-screen bg-cream-50">
+      <SEO
+        title="Sobre - ImpoRio |  Variedades de produtos na sua loja"
+        description="Conheça a história, missão e valores da ImpoRio, empresa especializada em utilidades domésticas, organização e decoração."
+        keywords="ImpoRio, sobre nós, utilidades domésticas, importação, missão, valores, empresa"
+        canonical="https://imporio.com.br/sobre"
+        image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      />
+
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-gray-800 to-gray-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-4 text-center pt-12">
           <h1 className="font-playfair text-5xl md:text-6xl font-bold mb-6">
             Sobre a <span className="text-gold-400">ImpoRio</span>
           </h1>

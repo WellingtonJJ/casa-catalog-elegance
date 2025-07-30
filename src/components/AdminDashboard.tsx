@@ -181,7 +181,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   };
 
   const handlePreviewCatalog = (catalogId: string) => {
-    window.open(`/catalog/${catalogId}`, '_blank');
+    window.open(`/catalogo/${catalogId}`, '_blank');
   };
 
   // Calculate stats for overview
@@ -205,7 +205,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   <h1 className="font-playfair text-xl font-bold">
                     Painel Administrativo
                   </h1>
-                  <p className="text-xs text-gray-300 font-poppins">ImpoRio - Casa Premium</p>
+                  <p className="text-xs text-gray-300 font-poppins"></p>
                 </div>
               </div>
             </div>
@@ -454,7 +454,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                         </label>
                         <input
                           type="text"
-                          placeholder="Ex: Bem-vindo à EmpoRio"
+                          placeholder="Ex: Bem-vindo à ImpoRio"
                           value={newSlide.title}
                           onChange={(e) => setNewSlide({...newSlide, title: e.target.value})}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-poppins"
